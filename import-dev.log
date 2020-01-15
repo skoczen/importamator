@@ -1,0 +1,278 @@
+
+
+Checking for EXIF-based GPS information, and auto-tagging dates.
+Checked 0123/2020-01-01_10-19-44_pocket_DJI_0727.MP4.
+Checked 0123/2020-01-01_06-09-42_sony_200101_0609.wav.
+Checked 0123/2020-01-01_10-25-11_pocket_GIS.
+Checked 0123/2020-01-05_16-38-49_pocket_DJI_0730.JPG.
+Checked 0123/2020-01-01_10-30-36_pocket_DJI_0729.MP4.
+Checked 0123/2020-01-01_10-25-11_pocket_DJI_0728.MP4.
+Checked 0124/2020-01-01_10-19-44_pocket_DJI_0727.MP4.
+Checked 0124/2020-01-05_16-39-06_pocket_DJI_0733.JPG.
+Checked 0124/2020-01-01_06-09-42_sony_200101_0609.wav.
+Checked 0124/2020-01-01_10-25-11_pocket_GIS.
+Checked 0124/2020-01-05_16-38-49_pocket_DJI_0730.JPG.
+Checked 0124/2020-01-01_10-30-36_pocket_DJI_0729.MP4.
+Checked 0124/2020-01-01_10-25-11_pocket_DJI_0728.MP4.
+Checked 0124/2020-01-01_10-25-11_pocket_DJI_0728-renamed.MP4.
+Checked resized/IMG_20200107_114310-200.jpg.
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/resized/IMG_20200107_114310-200.jpg
+Skipping 
+Failed to extract any EXIF from ../The Great Deduplication of 2020/test_sorting_dir/source/resized/IMG_20200107_114310-200.jpg
+Exif: {'ExifTool Version Number': '11.70', 'File Name': 'IMG_20200107_114310-200.jpg', 'Directory': '../The Great Deduplication of 2020/test_sorting_dir/source/resized', 'File Size': '28 kB', 'File Modification Date/Time': '2020:01:09 20:12:10+13:00', 'File Access Date/Time': '2020:01:10 18:05:47+13:00', 'File Inode Change Date/Time': '2020:01:10 18:05:47+13:00', 'File Permissions': 'rw-r--r--', 'File Type': 'JPEG', 'File Type Extension': 'jpg', 'MIME Type': 'image/jpeg', 'DCT Encode Version': '100', 'APP14 Flags 0': '[14], Encoded with Blend=1 downsampling', 'APP14 Flags 1': '(none)', 'Color Transform': 'YCbCr', 'Image Width': '202', 'Image Height': '142', 'Encoding Process': 'Baseline DCT, Huffman coding', 'Bits Per Sample': '8', 'Color Components': '3', 'Y Cb Cr Sub Sampling': 'YCbCr4:4:4 (1 1)', 'Image Size': '202x142', 'Megapixels': '0.029'}
+Couldn't find a matching device for IMG_20200107_114310-200.jpg. (Exif Camera: None) Please update CAMERA_MODEL_MAPPINGS in the script.
+Checked resized/IMG_20200107_114310.jpg.
+Checked resized/IMG_20200107_114310-1024.jpg.
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/resized/IMG_20200107_114310-1024.jpg
+Skipping 
+Failed to extract any EXIF from ../The Great Deduplication of 2020/test_sorting_dir/source/resized/IMG_20200107_114310-1024.jpg
+Exif: {'ExifTool Version Number': '11.70', 'File Name': 'IMG_20200107_114310-1024.jpg', 'Directory': '../The Great Deduplication of 2020/test_sorting_dir/source/resized', 'File Size': '602 kB', 'File Modification Date/Time': '2020:01:09 20:11:57+13:00', 'File Access Date/Time': '2020:01:09 20:11:58+13:00', 'File Inode Change Date/Time': '2020:01:09 20:11:57+13:00', 'File Permissions': 'rw-r--r--', 'File Type': 'JPEG', 'File Type Extension': 'jpg', 'MIME Type': 'image/jpeg', 'DCT Encode Version': '100', 'APP14 Flags 0': '[14], Encoded with Blend=1 downsampling', 'APP14 Flags 1': '(none)', 'Color Transform': 'YCbCr', 'Image Width': '1024', 'Image Height': '768', 'Encoding Process': 'Baseline DCT, Huffman coding', 'Bits Per Sample': '8', 'Color Components': '3', 'Y Cb Cr Sub Sampling': 'YCbCr4:4:4 (1 1)', 'Image Size': '1024x768', 'Megapixels': '0.786'}
+Couldn't find a matching device for IMG_20200107_114310-1024.jpg. (Exif Camera: None) Please update CAMERA_MODEL_MAPPINGS in the script.
+Checked resized/IMG_20200107_114310600-50pct.jpg.
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/resized/IMG_20200107_114310600-50pct.jpg
+Skipping 
+Failed to extract any EXIF from ../The Great Deduplication of 2020/test_sorting_dir/source/resized/IMG_20200107_114310600-50pct.jpg
+Exif: {'ExifTool Version Number': '11.70', 'File Name': 'IMG_20200107_114310600-50pct.jpg', 'Directory': '../The Great Deduplication of 2020/test_sorting_dir/source/resized', 'File Size': '46 kB', 'File Modification Date/Time': '2020:01:09 20:12:44+13:00', 'File Access Date/Time': '2020:01:09 20:12:45+13:00', 'File Inode Change Date/Time': '2020:01:09 20:12:44+13:00', 'File Permissions': 'rw-r--r--', 'File Type': 'JPEG', 'File Type Extension': 'jpg', 'MIME Type': 'image/jpeg', 'DCT Encode Version': '100', 'APP14 Flags 0': '[14], Encoded with Blend=1 downsampling', 'APP14 Flags 1': '(none)', 'Color Transform': 'YCbCr', 'Image Width': '591', 'Image Height': '449', 'Encoding Process': 'Baseline DCT, Huffman coding', 'Bits Per Sample': '8', 'Color Components': '3', 'Y Cb Cr Sub Sampling': 'YCbCr4:2:0 (2 2)', 'Image Size': '591x449', 'Megapixels': '0.265'}
+Couldn't find a matching device for IMG_20200107_114310600-50pct.jpg. (Exif Camera: None) Please update CAMERA_MODEL_MAPPINGS in the script.
+Checked older stuff/CRW_6497.CRW.
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/older stuff/CRW_6497.CRW
+Skipping Lens                            : 18.0 - 55.0 mm (35 mm equivalent: 27.9 - 85.3 mm)
+Skipping Focal Length                    : 21.0 mm (35 mm equivalent: 32.6 mm)
+Skipping 
+Checked older stuff/VIDEO0017.mp4.
+Checked older stuff/CRW_6496.CRW.
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/older stuff/CRW_6496.CRW
+Skipping Lens                            : 18.0 - 55.0 mm (35 mm equivalent: 27.9 - 85.3 mm)
+Skipping Focal Length                    : 21.0 mm (35 mm equivalent: 32.6 mm)
+Skipping 
+Checked older stuff/2019-03-04_07-47-55_pixel_MVIMG_20190303_154713~2.jpg.
+Checked older stuff/2019-12-22_13-35-04_pixel_edna_00100lrPORTRAIT_00100_BURST20191222133450106_COVER.jpg.
+Checked older stuff/IMAG0001.jpg.
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/older stuff/IMAG0001.jpg
+Skipping 
+Checked older stuff/2019-12-22_13-35-04_pixel_edna_00000PORTRAIT_00000_BURST20191222133452527.jpg.
+Checked older stuff/2019-12-22_13-35-00_pixel_edna_00100lrPORTRAIT_00100_BURST20191222133448564_COVER.jpg.
+Checked older stuff/2019-03-01_03-03-37_pixel_IMG_20190228_110050.jpg.
+Checked older stuff/2019-12-22_13-35-00_pixel_edna_00000PORTRAIT_00000_BURST20191222133450106.jpg.
+Checked older stuff/IMAG0004.jpg.
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/older stuff/IMAG0004.jpg
+Skipping 
+Checked identical/IMG_8003-copy.jpg.
+Checked identical/2016-01-02 11.40.29.jpg.
+Checked identical/IMG_8003.jpg.
+Checked 1235dng/2019-12-01_15-57-46_pixel_IMG_20191201_115744.dng.
+Checked 1235dng/2019-12-01_16-00-17_pixel_IMG_20191201_120015.dng.
+Checked 1235dng/2019-12-01_16-00-14_pixel_IMG_20191201_120012.dng.
+Checked murica/MVIMG_20190914_224928_1.jpg.
+Checked murica/IMG_20190904_084928.jpg.
+Checked murica/IMG_20190914_124138.jpg.
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/murica/IMG_20190914_124138.jpg
+Skipping Focal Length                    : 4.4 mm (35 mm equivalent: 27.0 mm)
+Skipping 
+Checked murica/IMG_20190913_153535.jpg.
+Checked murica/IMG_20190904_135036.jpg.
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/murica/IMG_20190904_135036.jpg
+Skipping Focal Length                    : 4.4 mm (35 mm equivalent: 27.0 mm)
+Skipping 
+Checked similar but different/IMG_20190520_110043.jpg.
+Checked similar but different/IMG_7397.JPG.
+Checked similar but different/IMG_20190708_171232.jpg.
+Checked similar but different/IMG_20190708_171228.jpg.
+Checked similar but different/IMG_20190520_110039.jpg.
+Checked similar but different/2015-11-22 13.15.08.jpg.
+
+Checking for duplicates, verifying location, and deciding on the canonical copy.
+Skipping, file match: 
+     0123/2020-01-01_10-19-44_pocket_DJI_0727.MP4, with
+     0123/2020-01-01_10-19-44_pocket_DJI_0727.MP4 (already added)
+Skipping, file match: 
+     0123/2020-01-01_06-09-42_sony_200101_0609.wav, with
+     0123/2020-01-01_06-09-42_sony_200101_0609.wav (already added)
+Skipping, file match: 
+     0123/2020-01-01_10-25-11_pocket_GIS, with
+     0123/2020-01-01_10-25-11_pocket_GIS (already added)
+Skipping, image match: 
+     0123/2020-01-05_16-38-49_pocket_DJI_0730.JPG with
+     0123/2020-01-05_16-38-49_pocket_DJI_0730.JPG (already added)
+Skipping, file match: 
+     0123/2020-01-01_10-30-36_pocket_DJI_0729.MP4, with
+     0123/2020-01-01_10-30-36_pocket_DJI_0729.MP4 (already added)
+Skipping, file match: 
+     0123/2020-01-01_10-25-11_pocket_DJI_0728.MP4, with
+     0123/2020-01-01_10-25-11_pocket_DJI_0728.MP4 (already added)
+Skipping, file match: 
+     0124/2020-01-01_10-19-44_pocket_DJI_0727.MP4, with
+     0123/2020-01-01_10-19-44_pocket_DJI_0727.MP4 (already added)
+Skipping, image match: 
+     0124/2020-01-05_16-39-06_pocket_DJI_0733.JPG with
+     0124/2020-01-05_16-39-06_pocket_DJI_0733.JPG (already added)
+Skipping, file match: 
+     0124/2020-01-01_06-09-42_sony_200101_0609.wav, with
+     0123/2020-01-01_06-09-42_sony_200101_0609.wav (already added)
+Skipping, file match: 
+     0124/2020-01-01_10-25-11_pocket_GIS, with
+     0123/2020-01-01_10-25-11_pocket_GIS (already added)
+Skipping, image match: 
+     0124/2020-01-05_16-38-49_pocket_DJI_0730.JPG with
+     0123/2020-01-05_16-38-49_pocket_DJI_0730.JPG (already added)
+Skipping, file match: 
+     0124/2020-01-01_10-30-36_pocket_DJI_0729.MP4, with
+     0123/2020-01-01_10-30-36_pocket_DJI_0729.MP4 (already added)
+Skipping, file match: 
+     0124/2020-01-01_10-25-11_pocket_DJI_0728.MP4, with
+     0123/2020-01-01_10-25-11_pocket_DJI_0728.MP4 (already added)
+Skipping, file match: 
+     0124/2020-01-01_10-25-11_pocket_DJI_0728-renamed.MP4, with
+     0123/2020-01-01_10-25-11_pocket_DJI_0728.MP4 (already added)
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/resized/IMG_20200107_114310-200.jpg
+Skipping 
+Failed to extract any EXIF from ../The Great Deduplication of 2020/test_sorting_dir/source/resized/IMG_20200107_114310-200.jpg
+Exif: {'ExifTool Version Number': '11.70', 'File Name': 'IMG_20200107_114310-200.jpg', 'Directory': '../The Great Deduplication of 2020/test_sorting_dir/source/resized', 'File Size': '28 kB', 'File Modification Date/Time': '2020:01:09 20:12:10+13:00', 'File Access Date/Time': '2020:01:10 18:05:47+13:00', 'File Inode Change Date/Time': '2020:01:10 18:05:47+13:00', 'File Permissions': 'rw-r--r--', 'File Type': 'JPEG', 'File Type Extension': 'jpg', 'MIME Type': 'image/jpeg', 'DCT Encode Version': '100', 'APP14 Flags 0': '[14], Encoded with Blend=1 downsampling', 'APP14 Flags 1': '(none)', 'Color Transform': 'YCbCr', 'Image Width': '202', 'Image Height': '142', 'Encoding Process': 'Baseline DCT, Huffman coding', 'Bits Per Sample': '8', 'Color Components': '3', 'Y Cb Cr Sub Sampling': 'YCbCr4:4:4 (1 1)', 'Image Size': '202x142', 'Megapixels': '0.029'}
+Couldn't find a matching device for IMG_20200107_114310-200.jpg. (Exif Camera: None) Please update CAMERA_MODEL_MAPPINGS in the script.
+Skipping, image match: 
+     resized/IMG_20200107_114310-200.jpg with
+     resized/IMG_20200107_114310.jpg (already added)
+Skipping, image match: 
+     resized/IMG_20200107_114310.jpg with
+     resized/IMG_20200107_114310.jpg (already added)
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/resized/IMG_20200107_114310-1024.jpg
+Skipping 
+Failed to extract any EXIF from ../The Great Deduplication of 2020/test_sorting_dir/source/resized/IMG_20200107_114310-1024.jpg
+Exif: {'ExifTool Version Number': '11.70', 'File Name': 'IMG_20200107_114310-1024.jpg', 'Directory': '../The Great Deduplication of 2020/test_sorting_dir/source/resized', 'File Size': '602 kB', 'File Modification Date/Time': '2020:01:09 20:11:57+13:00', 'File Access Date/Time': '2020:01:09 20:11:58+13:00', 'File Inode Change Date/Time': '2020:01:09 20:11:57+13:00', 'File Permissions': 'rw-r--r--', 'File Type': 'JPEG', 'File Type Extension': 'jpg', 'MIME Type': 'image/jpeg', 'DCT Encode Version': '100', 'APP14 Flags 0': '[14], Encoded with Blend=1 downsampling', 'APP14 Flags 1': '(none)', 'Color Transform': 'YCbCr', 'Image Width': '1024', 'Image Height': '768', 'Encoding Process': 'Baseline DCT, Huffman coding', 'Bits Per Sample': '8', 'Color Components': '3', 'Y Cb Cr Sub Sampling': 'YCbCr4:4:4 (1 1)', 'Image Size': '1024x768', 'Megapixels': '0.786'}
+Couldn't find a matching device for IMG_20200107_114310-1024.jpg. (Exif Camera: None) Please update CAMERA_MODEL_MAPPINGS in the script.
+Skipping, image match: 
+     resized/IMG_20200107_114310-1024.jpg with
+     resized/IMG_20200107_114310.jpg (already added)
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/resized/IMG_20200107_114310600-50pct.jpg
+Skipping 
+Failed to extract any EXIF from ../The Great Deduplication of 2020/test_sorting_dir/source/resized/IMG_20200107_114310600-50pct.jpg
+Exif: {'ExifTool Version Number': '11.70', 'File Name': 'IMG_20200107_114310600-50pct.jpg', 'Directory': '../The Great Deduplication of 2020/test_sorting_dir/source/resized', 'File Size': '46 kB', 'File Modification Date/Time': '2020:01:09 20:12:44+13:00', 'File Access Date/Time': '2020:01:09 20:12:45+13:00', 'File Inode Change Date/Time': '2020:01:09 20:12:44+13:00', 'File Permissions': 'rw-r--r--', 'File Type': 'JPEG', 'File Type Extension': 'jpg', 'MIME Type': 'image/jpeg', 'DCT Encode Version': '100', 'APP14 Flags 0': '[14], Encoded with Blend=1 downsampling', 'APP14 Flags 1': '(none)', 'Color Transform': 'YCbCr', 'Image Width': '591', 'Image Height': '449', 'Encoding Process': 'Baseline DCT, Huffman coding', 'Bits Per Sample': '8', 'Color Components': '3', 'Y Cb Cr Sub Sampling': 'YCbCr4:2:0 (2 2)', 'Image Size': '591x449', 'Megapixels': '0.265'}
+Couldn't find a matching device for IMG_20200107_114310600-50pct.jpg. (Exif Camera: None) Please update CAMERA_MODEL_MAPPINGS in the script.
+Skipping, image match: 
+     resized/IMG_20200107_114310600-50pct.jpg with
+     resized/IMG_20200107_114310.jpg (already added)
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/older stuff/CRW_6497.CRW
+Skipping Lens                            : 18.0 - 55.0 mm (35 mm equivalent: 27.9 - 85.3 mm)
+Skipping Focal Length                    : 21.0 mm (35 mm equivalent: 32.6 mm)
+Skipping 
+Failed to imagehash older stuff/CRW_6497.CRW. Falling back to file hash.
+Traceback (most recent call last):
+  File "main.py", line 645, in get_file_metadata
+    meta["imagehashes"] = image_hashes(file_path)
+  File "main.py", line 221, in image_hashes
+    im = Image.open(file_path)
+  File "/Users/skoczen/.virtualenvs/importamator/lib/python3.7/site-packages/PIL/Image.py", line 2862, in open
+    "cannot identify image file %r" % (filename if filename else fp)
+PIL.UnidentifiedImageError: cannot identify image file '../The Great Deduplication of 2020/test_sorting_dir/source/older stuff/CRW_6497.CRW'
+
+Skipping, file match: 
+     older stuff/CRW_6497.CRW, with
+     older stuff/CRW_6497.CRW (already added)
+Couldn't find a matching device for VIDEO0017.mp4. (Exif Camera: None) Please update CAMERA_MODEL_MAPPINGS in the script.
+Skipping, file match: 
+     older stuff/VIDEO0017.mp4, with
+     older stuff/VIDEO0017.mp4 (already added)
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/older stuff/CRW_6496.CRW
+Skipping Lens                            : 18.0 - 55.0 mm (35 mm equivalent: 27.9 - 85.3 mm)
+Skipping Focal Length                    : 21.0 mm (35 mm equivalent: 32.6 mm)
+Skipping 
+Failed to imagehash older stuff/CRW_6496.CRW. Falling back to file hash.
+Traceback (most recent call last):
+  File "main.py", line 645, in get_file_metadata
+    meta["imagehashes"] = image_hashes(file_path)
+  File "main.py", line 221, in image_hashes
+    im = Image.open(file_path)
+  File "/Users/skoczen/.virtualenvs/importamator/lib/python3.7/site-packages/PIL/Image.py", line 2862, in open
+    "cannot identify image file %r" % (filename if filename else fp)
+PIL.UnidentifiedImageError: cannot identify image file '../The Great Deduplication of 2020/test_sorting_dir/source/older stuff/CRW_6496.CRW'
+
+Skipping, file match: 
+     older stuff/CRW_6496.CRW, with
+     older stuff/CRW_6496.CRW (already added)
+Skipping, image match: 
+     older stuff/2019-03-04_07-47-55_pixel_MVIMG_20190303_154713~2.jpg with
+     older stuff/2019-03-04_07-47-55_pixel_MVIMG_20190303_154713~2.jpg (already added)
+Skipping, image match: 
+     older stuff/2019-12-22_13-35-04_pixel_edna_00100lrPORTRAIT_00100_BURST20191222133450106_COVER.jpg with
+     older stuff/2019-12-22_13-35-04_pixel_edna_00100lrPORTRAIT_00100_BURST20191222133450106_COVER.jpg (already added)
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/older stuff/IMAG0001.jpg
+Skipping 
+Skipping, image match: 
+     older stuff/IMAG0001.jpg with
+     older stuff/IMAG0001.jpg (already added)
+Skipping, image match: 
+     older stuff/2019-12-22_13-35-04_pixel_edna_00000PORTRAIT_00000_BURST20191222133452527.jpg with
+     older stuff/2019-12-22_13-35-04_pixel_edna_00000PORTRAIT_00000_BURST20191222133452527.jpg (already added)
+Skipping, image match: 
+     older stuff/2019-12-22_13-35-00_pixel_edna_00100lrPORTRAIT_00100_BURST20191222133448564_COVER.jpg with
+     older stuff/2019-12-22_13-35-00_pixel_edna_00100lrPORTRAIT_00100_BURST20191222133448564_COVER.jpg (already added)
+Skipping, image match: 
+     older stuff/2019-03-01_03-03-37_pixel_IMG_20190228_110050.jpg with
+     older stuff/2019-03-01_03-03-37_pixel_IMG_20190228_110050.jpg (already added)
+Skipping, image match: 
+     older stuff/2019-12-22_13-35-00_pixel_edna_00000PORTRAIT_00000_BURST20191222133450106.jpg with
+     older stuff/2019-12-22_13-35-00_pixel_edna_00000PORTRAIT_00000_BURST20191222133450106.jpg (already added)
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/older stuff/IMAG0004.jpg
+Skipping 
+Skipping, image match: 
+     older stuff/IMAG0004.jpg with
+     older stuff/IMAG0004.jpg (already added)
+Skipping, image match: 
+     identical/IMG_8003-copy.jpg with
+     identical/IMG_8003-copy.jpg (already added)
+Skipping, image match: 
+     identical/2016-01-02 11.40.29.jpg with
+     identical/IMG_8003-copy.jpg (already added)
+Skipping, image match: 
+     identical/IMG_8003.jpg with
+     identical/IMG_8003-copy.jpg (already added)
+Skipping, image match: 
+     1235dng/2019-12-01_15-57-46_pixel_IMG_20191201_115744.dng with
+     1235dng/2019-12-01_15-57-46_pixel_IMG_20191201_115744.dng (already added)
+Skipping, image match: 
+     1235dng/2019-12-01_16-00-17_pixel_IMG_20191201_120015.dng with
+     1235dng/2019-12-01_16-00-17_pixel_IMG_20191201_120015.dng (already added)
+Skipping, image match: 
+     1235dng/2019-12-01_16-00-14_pixel_IMG_20191201_120012.dng with
+     1235dng/2019-12-01_16-00-14_pixel_IMG_20191201_120012.dng (already added)
+Skipping, image match: 
+     murica/MVIMG_20190914_224928_1.jpg with
+     murica/MVIMG_20190914_224928_1.jpg (already added)
+Skipping, image match: 
+     murica/IMG_20190904_084928.jpg with
+     murica/IMG_20190904_084928.jpg (already added)
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/murica/IMG_20190914_124138.jpg
+Skipping Focal Length                    : 4.4 mm (35 mm equivalent: 27.0 mm)
+Skipping 
+Skipping, image match: 
+     murica/IMG_20190914_124138.jpg with
+     murica/IMG_20190914_124138.jpg (already added)
+Skipping, image match: 
+     murica/IMG_20190913_153535.jpg with
+     murica/IMG_20190913_153535.jpg (already added)
+Falling back to exiftool for ../The Great Deduplication of 2020/test_sorting_dir/source/murica/IMG_20190904_135036.jpg
+Skipping Focal Length                    : 4.4 mm (35 mm equivalent: 27.0 mm)
+Skipping 
+Skipping, image match: 
+     murica/IMG_20190904_135036.jpg with
+     murica/IMG_20190904_135036.jpg (already added)
+Skipping, image match: 
+     similar but different/IMG_20190520_110043.jpg with
+     similar but different/IMG_20190520_110043.jpg (already added)
+Skipping, image match: 
+     similar but different/IMG_7397.JPG with
+     similar but different/IMG_7397.JPG (already added)
+Skipping, image match: 
+     similar but different/IMG_20190708_171232.jpg with
+     similar but different/IMG_20190708_171232.jpg (already added)
+Skipping, image match: 
+     similar but different/IMG_20190708_171228.jpg with
+     similar but different/IMG_20190708_171228.jpg (already added)
+Skipping, image match: 
+     similar but different/IMG_20190520_110039.jpg with
+     similar but different/IMG_20190520_110039.jpg (already added)
+Skipping, image match: 
+     similar but different/2015-11-22 13.15.08.jpg with
+     similar but different/2015-11-22 13.15.08.jpg (already added)
+
+Copying files.
