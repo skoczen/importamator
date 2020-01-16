@@ -8,7 +8,7 @@ import io
 import os
 import piexif
 import pickle
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import imagehash
 import numpy
 import pathlib
@@ -50,7 +50,7 @@ EXTENSIONS_TO_IMPORT = [
 PARTIALS_TO_IGNORE = [
     "tmp",
     "idx",
-    ".thumbnails",
+    # ".thumbnails",
     "fseventsd-uuid",
     "shadowIndex",
     "StoreFile",
@@ -74,13 +74,13 @@ EXTENSIONS_TO_IGNORE = []
 
 # Strings that might already be in the filename from previous systems, and what device to map them to.
 DEVICE_SUBSTRINGS = {
-    "haetori_DJI":  "haetori",
-    "pocket_DJI":  "pocket",
-    "pocket_GIS":  "pocket",
-    "sony":  "sonya10",
-    "pixel":  "pixel",
-    "300d":  "digitalrebel",
-    "htcevo":  "htcevo",
+    "haetori_DJI": "haetori",
+    "pocket_DJI": "pocket",
+    "pocket_GIS": "pocket",
+    "sony": "sonya10",
+    "pixel": "pixel",
+    "300d": "digitalrebel",
+    "htcevo": "htcevo",
 }
 # Unused
 DEVICE_REGEXES = {
@@ -94,6 +94,7 @@ CAMERA_MODEL_MAPPINGS = {
     "Canon EOS DIGITAL REBEL": "digitalrebel",
     "EVO": "htcevo",
     "iPhone 5s": "iphone5se",
+    "XT1049": "motox",
 }
 # Maps device names to a prettier display format.
 DEVICE_DISPLAYNAME_MAPPINGS = {
@@ -106,6 +107,7 @@ DEVICE_DISPLAYNAME_MAPPINGS = {
     "htcevo": "HTC Evo",
     "unknown": "Unknown Device",
     "iphone5se": "iPhone 5 SE",
+    "motox": "Moto X",
 }
 LOCATIONIQ_TOKEN = "e49f9326982f23"
 
@@ -158,7 +160,7 @@ if "imagehashes" not in brain:
 
 action_log = ""
 now_str = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-now_str = "dev"
+# now_str = "dev"
 
 CACHED_FILE_INFO = {}
 
@@ -345,8 +347,8 @@ try:
                 meta["exiftime"] = datetime.datetime.strptime(exif["0th"][306].decode(), "%Y:%m:%d %H:%M:%S")
 
                 try:
-                    meta["width"] = exif["0th"][256]
-                    meta["height"] = exif["0th"][257]
+                    meta["width"] = int(exif["0th"][256])
+                    meta["height"] = int(exif["0th"][257])
                 except:
                     pass
 
@@ -392,8 +394,8 @@ try:
 
                 try:
                     meta["Camera Model"] = exif_dict["Camera Model Name"]
-                    meta["width"] = exif_dict['Image Width']
-                    meta["height"] = exif_dict['Image Height']
+                    meta["width"] = int(exif_dict['Image Width'])
+                    meta["height"] = int(exif_dict['Image Height'])
                     meta["datetime"] = datetime.datetime.strptime(exif_dict["Date/Time Original"].split(".")[0], "%Y:%m:%d %H:%M:%S")
                     meta["exiftime"] = datetime.datetime.strptime(exif_dict["Date/Time Original"].split(".")[0], "%Y:%m:%d %H:%M:%S")
                 except Exception as e:
@@ -414,11 +416,18 @@ try:
             meta["datetime"] = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
 
         meta["mtime"] = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
-        
-        if meta["is_image"] and not "width" in meta:
-            with Image.open(file_path) as im:
-                meta["width"], meta["height"] = im.size
-        
+
+        try:
+            if meta["is_image"] and not "width" in meta:
+                with Image.open(file_path) as im:
+                    meta["width"], meta["height"] = im.size
+                    meta["width"] = int(meta["width"])
+                    meta["height"] = int(meta["height"])
+        except UnidentifiedImageError:
+            log_action("Failed to read image at %s. It might be corrupt, please check and try again." % file_path)
+            meta["failed"] = "❗Failed to read image at %s. It might be corrupt, please check and try again."
+            return meta
+
         date_str = meta["datetime"].strftime("%Y-%m-%d")
         month_str = meta["datetime"].strftime("%Y-%m")
 
@@ -514,12 +523,12 @@ try:
                 return meta
 
             if meta["is_image"]:
-                os.system("open -a /System/Applications/Preview.app %s" % file_path.replace(" ", "\\ "))
+                os.system("open -a /Applications/Preview.app %s" % file_path.replace(" ", "\\ "))
             else:
                 os.system("open %s" % file_path.replace(" ", "\\ "))
 
             previous = None
-            for d in sorted(brain["date_country"], reverse=False):
+            for d in sorted(brain["date_country"], reverse=True):
                 if d == date_str:
                     break
                 previous = brain["date_country"][d]
@@ -543,7 +552,7 @@ try:
                     opened = True
                 
                 previous = None
-                for d in sorted(brain["date_city"], reverse=False):
+                for d in sorted(brain["date_city"], reverse=True):
                     if d == date_str:
                         break
                     previous = brain["date_city"][d]
@@ -562,7 +571,7 @@ try:
             else:
                 brain["date_state"][date_str] = "Adding.."
                 previous = None
-                for d in sorted(brain["date_state"], reverse=False):
+                for d in sorted(brain["date_state"], reverse=True):
                     if d == date_str:
                         break
                     previous = brain["date_state"][d]
@@ -659,19 +668,19 @@ try:
                                     meta["lowest_distance_from"] = brain["imagehashes"][ih]["relative_file_path"]
 
                     meta["lowest_distance"] = lowest_distance
+                    log_action(meta)
                     if lowest_hash:
                         lowest_hash_image = brain["imagehashes"][lowest_hash]
-                        
-                        current_image_longest_edge = meta["width"]
-                        if meta["height"] > meta["width"]:
-                            current_image_longest_edge = meta["height"]
-                        hash_image_longest_edge = lowest_hash_image["width"]
-                        if lowest_hash_image["height"] > lowest_hash_image["width"]:
-                            hash_image_longest_edge = lowest_hash_image["height"]
+
+                        current_image_longest_edge = int(meta["width"])
+                        if int(meta["height"]) > int(meta["width"]):
+                            current_image_longest_edge = int(meta["height"])
+                        hash_image_longest_edge = int(lowest_hash_image["width"])
+                        if int(lowest_hash_image["height"]) > int(lowest_hash_image["width"]):
+                            hash_image_longest_edge = int(lowest_hash_image["height"])
                     # print(meta["lowest_distance"])
                     # print(lowest_hash)
                     # if meta["imagehash"] in brain["imagehashes"]:
-
                     if (
                         (lowest_distance < MAXIMUM_IDENTICAL_HASH_DISTANCE and current_image_longest_edge == hash_image_longest_edge) or
                         (lowest_distance < MAXIMUM_THUMBNAIL_HASH_DISTANCE and current_image_longest_edge != hash_image_longest_edge)
@@ -766,7 +775,7 @@ try:
                     total_size += os.path.getsize(file_path)
 
             for file_path in file_list:
-                if not ignored(file_path):
+                if not ignored(file_path) and os.path.getsize(file_path) > 0:
 
                     sys.stdout.write("\r Checking %s... (%s/%s)" % (
                             file_path.split("/")[-1], counter, total,
@@ -775,6 +784,8 @@ try:
                     meta = get_file_metadata(file_path, exif_gps_only=exif_gps_only)
                     # print(meta)
                     if exif_gps_only:
+                        if "failed" in meta:
+                            action = "❗Failed: %s" % meta["failed"]
                         if "error" in meta:
                             action = "❗Checked"
                         else:
@@ -812,15 +823,26 @@ try:
                         error_str = ""
                         if "error" in meta:
                             error_str = meta["error"]
-                        sys.stdout.write("\r%s %s. %s (%s) from %s, %s %s\n" % (
-                                action,
-                                meta["relative_file_path"],
-                                DEVICE_DISPLAYNAME_MAPPINGS[meta["device"]],
-                                meta["device"],
-                                city_str,
-                                country_str,
-                                error_str,
-                        ))
+                        try:
+                            if "failed" not in meta:
+                                sys.stdout.write("\r%s %s. %s (%s) from %s, %s %s\n" % (
+                                    action,
+                                    meta["relative_file_path"],
+                                    DEVICE_DISPLAYNAME_MAPPINGS[meta["device"]],
+                                    meta["device"],
+                                    city_str,
+                                    country_str,
+                                    error_str,
+                                ))
+                            else:
+                                sys.stdout.write("\r%s %s\n" % (
+                                    action,
+                                    meta["relative_file_path"],
+                                ))
+                        except Exception as e:
+                            print(meta)
+                            print(meta["device"])
+                            raise e
                     else:
                         sys.stdout.write("\r%s %s. (Non-image or no GPS EXIF.)\n" % (
                                 action,
