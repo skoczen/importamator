@@ -127,6 +127,14 @@ USA_NAMES = [
 MAXIMUM_THUMBNAIL_HASH_DISTANCE = 8
 MAXIMUM_IDENTICAL_HASH_DISTANCE = 1
 
+if os.path.exists("/System/Applications/Preview.app"):
+    preview_path = "/System/Applications/Preview.app"
+elif os.path.exists("/Applications/Preview.app"):
+    preview_path = "/Applications/Preview.app"
+else:
+    preview_path = ""
+
+
 class Device(object):
 
     def __init__(self, name, regex_str, start_date, end_date=None):
@@ -282,19 +290,37 @@ try:
                 raise PermissionError
 
 
-
     def get_local_file_list(source_dir):
         files = []
+        parse_dirs = []
+        if os.path.islink(source_dir):
+            source_dir = os.readlink(source_dir)
+        else:
+            parse_dirs.append(source_dir)
 
         for dirpath, dirnames, filenames in os.walk(source_dir, topdown=False):
+            for dirname in dirnames:
+                if os.path.islink(os.path.join(dirpath, dirname)):
+                    if ".." in dirname:
+                        parse_dirs.append(os.path.abspath(os.path.join(dirpath, os.readlink(os.path.join(dirpath, dirname)))))
+                    else:
+                        parse_dirs.append(os.path.abspath(os.path.join(os.path.join(dirpath, dirname))))
             for filename in filenames:
-                files.append(os.path.join(dirpath, filename))
-                sys.stdout.write(".")
-                sys.stdout.flush()
+                if os.path.islink(os.path.join(dirpath, filename)):
+                    parse_dirs.append(os.readlink(os.path.join(dirpath, filename)))
+
+        for parse_dir in parse_dirs:
+            for dirpath, dirnames, filenames in os.walk(parse_dir, topdown=False):
+                if os.path.islink(dirpath):
+                    pass
+                else:
+                    for filename in filenames:
+                        files.append(os.path.join(dirpath, filename))
+                        sys.stdout.write(".")
+                        sys.stdout.flush()
                 # if filename.endswith(".html") or filename.endswith(".xml"):
 
         return files
-
 
     def ignored(file_path):
         if file_path.split(".")[-1].lower() in EXTENSIONS_TO_IGNORE:
@@ -523,7 +549,10 @@ try:
                 return meta
 
             if meta["is_image"]:
-                os.system("open -a /Applications/Preview.app %s" % file_path.replace(" ", "\\ "))
+                os.system("open -a %s %s" % (
+                    preview_path,
+                    file_path.replace(" ", "\\ "))
+                )
             else:
                 os.system("open %s" % file_path.replace(" ", "\\ "))
 
