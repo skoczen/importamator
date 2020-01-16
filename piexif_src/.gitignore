@@ -102,8 +102,3 @@ doc/_build/
 run_coverage.bat
 up2pypi.bat
 out/
-backup_dandelion.sh
-backup_maple_seed.sh
-backup_sagi.sh
-*.csv
-*.zip
