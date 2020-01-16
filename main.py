@@ -349,7 +349,7 @@ try:
         # Get file type from extension (which we trust, because why not. I'm not sniffing headers for this.)
         extension = file_path.split(".")[-1]
         meta["file_path"] = file_path
-        meta["relative_file_path"] = file_path.replace(ARGS.source_dir, "")
+        meta["relative_file_path"] = file_path.replace(ARGS.source_dir, "").replace(ARGS.full_source_path, "")
         meta["extension"] = extension
         meta["source_name"] = file_path.split("/")[-1]
         meta["file_name"] = file_path.split("/")[-1]
@@ -475,18 +475,19 @@ try:
             "lat" in meta and
             "lon" in meta
         ):
-            print("Checking Online Reverse Geocode...")
-            resp = requests.get(
-                "https://us1.locationiq.com/v1/reverse.php?key=%s&lat=%s&lon=%s&format=json" % 
-                (
-                    LOCATIONIQ_TOKEN,
-                    meta["lat"],
-                    meta["lon"],
-                )
-            )
-            # print(resp.json())
             retry = True
             while retry:
+                print("Checking Online Reverse Geocode...")
+                resp = requests.get(
+                    "https://us1.locationiq.com/v1/reverse.php?key=%s&lat=%s&lon=%s&format=json" % 
+                    (
+                        LOCATIONIQ_TOKEN,
+                        meta["lat"],
+                        meta["lon"],
+                    ),
+                    timeout=5
+                )
+                # print(resp.json())
                 retry = False
                 try:
                     if "country" in resp.json()["address"]:
@@ -557,8 +558,10 @@ try:
                 os.system("open %s" % file_path.replace(" ", "\\ "))
 
             previous = None
-            for d in sorted(brain["date_country"], reverse=True):
-                if d == date_str:
+            for d in sorted(brain["date_country"].keys(), reverse=True):
+                if d < date_str:
+                    if not previous:
+                        previous = brain["date_country"][d]        
                     break
                 previous = brain["date_country"][d]
             country = input("\n   What country is this from, on %s? [%s] " % (
@@ -581,8 +584,10 @@ try:
                     opened = True
                 
                 previous = None
-                for d in sorted(brain["date_city"], reverse=True):
-                    if d == date_str:
+                for d in sorted(brain["date_city"].keys(), reverse=True):
+                    if d < date_str:
+                        if not previous:
+                            previous = brain["date_city"][d]        
                         break
                     previous = brain["date_city"][d]
                 city = input("   What city is this from, on %s? [%s] " % (
@@ -600,8 +605,10 @@ try:
             else:
                 brain["date_state"][date_str] = "Adding.."
                 previous = None
-                for d in sorted(brain["date_state"], reverse=True):
-                    if d == date_str:
+                for d in sorted(brain["date_state"].keys(), reverse=True):
+                    if d < date_str:
+                        if not previous:
+                            previous = brain["date_state"][d]        
                         break
                     previous = brain["date_state"][d]
 
@@ -880,7 +887,7 @@ try:
                     sys.stdout.flush()
                 else:
                     if exif_gps_only:
-                        print("x Ignored %s" % file_path)
+                        print("x Ignored %s" % meta["relative_file_path"])
                     pass
                 counter += 1
         else:
@@ -1065,6 +1072,7 @@ try:
             brain["date_city"] = {}
             brain["month_country"] = {}
 
+        args.full_source_path = os.path.abspath(args.source_dir)
         ARGS = args
 
         prepare_import_dir(args)
