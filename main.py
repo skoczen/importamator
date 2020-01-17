@@ -315,7 +315,10 @@ try:
                     pass
                 else:
                     for filename in filenames:
-                        files.append(os.path.join(dirpath, filename))
+                        if os.path.islink(os.path.join(dirpath, filename)):
+                            files.append(os.readlink(os.path.join(dirpath, filename)))
+                        else:
+                            files.append(os.path.join(dirpath, filename))
                         sys.stdout.write(".")
                         sys.stdout.flush()
                 # if filename.endswith(".html") or filename.endswith(".xml"):
