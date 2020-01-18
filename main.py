@@ -78,7 +78,8 @@ DEVICE_SUBSTRINGS = {
     "pocket_DJI": "pocket",
     "pocket_GIS": "pocket",
     "sony": "sonya10",
-    "pixel": "pixel",
+    "pixel_edna": "pixel3_edna",
+    "pixel": "pixel2",
     "300d": "digitalrebel",
     "htcevo": "htcevo",
 }
@@ -91,10 +92,12 @@ CAMERA_MODEL_MAPPINGS = {
     "Pixel 2": "pixel2",
     "Pixel 3": "pixel3_edna",
     "Osmo Pocket": "pocket",
+    "OSMO MOBILE": "osmomobile",
     "Canon EOS DIGITAL REBEL": "digitalrebel",
     "EVO": "htcevo",
     "iPhone 5s": "iphone5se",
     "XT1049": "motox",
+    "NIKON D600": "bonnienikon",
 }
 # Maps device names to a prettier display format.
 DEVICE_DISPLAYNAME_MAPPINGS = {
@@ -108,6 +111,8 @@ DEVICE_DISPLAYNAME_MAPPINGS = {
     "unknown": "Unknown Device",
     "iphone5se": "iPhone 5 SE",
     "motox": "Moto X",
+    "osmomobile": "DJI Osmo Mobile",
+    "bonnienikon": "Bonnie's Nikon D600",
 }
 LOCATIONIQ_TOKEN = "e49f9326982f23"
 
@@ -316,7 +321,10 @@ try:
                 else:
                     for filename in filenames:
                         if os.path.islink(os.path.join(dirpath, filename)):
-                            files.append(os.readlink(os.path.join(dirpath, filename)))
+                            if os.path.exists(os.readlink(os.path.join(dirpath, filename))):
+                                files.append(os.readlink(os.path.join(dirpath, filename)))
+                            else:
+                                log_action("Could not find file symlinked from %s" % os.path.join(dirpath, filename))
                         else:
                             files.append(os.path.join(dirpath, filename))
                         sys.stdout.write(".")
@@ -348,6 +356,7 @@ try:
     def get_file_metadata(file_path, exif_gps_only=False):
         global ARGS
         meta = {}
+        error_str = None
 
         # Get file type from extension (which we trust, because why not. I'm not sniffing headers for this.)
         extension = file_path.split(".")[-1]
@@ -371,7 +380,7 @@ try:
             assert meta["is_image"]
             try:
                 exif = piexif.load(file_path)
-                meta["Camera Model"] = exif["0th"][272].decode()
+                meta["Camera Model"] = exif["0th"][272].decode().replace("\x00", "")
                 meta["datetime"] = datetime.datetime.strptime(exif["0th"][306].decode(), "%Y:%m:%d %H:%M:%S")
                 meta["exiftime"] = datetime.datetime.strptime(exif["0th"][306].decode(), "%Y:%m:%d %H:%M:%S")
 
@@ -493,11 +502,12 @@ try:
                 # print(resp.json())
                 retry = False
                 try:
+                    city = None
                     if "country" in resp.json()["address"]:
                         country = resp.json()["address"]["country"]
                         if "city" in resp.json()["address"]:
                             city = resp.json()["address"]["city"]
-                        else:
+                        elif "county" in resp.json():
                             city = resp.json()["address"]["county"]
                         
                         if "state" in resp.json()["address"]:
@@ -507,7 +517,8 @@ try:
                      
                         meta["country"] = country
                         brain["date_country"][date_str] = country
-                        meta["city"] = city
+                        if city:
+                            meta["city"] = city
                         brain["date_city"][date_str] = city
                 except Exception as e:
                     if "error" in resp.json() and "Rate Limit" in resp.json()["error"]:
@@ -523,8 +534,8 @@ try:
     
 
         # Device it was captured on
-        if "Camera Model" in meta and meta["Camera Model"] in CAMERA_MODEL_MAPPINGS:
-            meta["device"] = CAMERA_MODEL_MAPPINGS[meta["Camera Model"]]
+        if "Camera Model" in meta and meta["Camera Model"].strip() in CAMERA_MODEL_MAPPINGS:
+            meta["device"] = CAMERA_MODEL_MAPPINGS[meta["Camera Model"].strip()]
         
         else:
             for device, r in DEVICE_REGEXES.items():
@@ -533,7 +544,7 @@ try:
             for substring, device in DEVICE_SUBSTRINGS.items():
                 if substring in file_path.split("/")[-1]:
                     meta["device"] = device
-        
+
         if "device" not in meta or not meta["device"]:
             exif_camera = None
             if "Camera Model" in meta:
@@ -546,6 +557,10 @@ try:
             if not ARGS.require_device and not exif_camera:
                 meta["device"] = "unknown"
             else:
+                print(meta)
+                print(CAMERA_MODEL_MAPPINGS)
+                print("Camera Model" in meta )
+                print(meta["Camera Model"].strip() in CAMERA_MODEL_MAPPINGS)
                 raise Exception(error_str)
 
         if date_str not in brain["date_country"]:
@@ -817,7 +832,7 @@ try:
                 if not ignored(file_path) and os.path.getsize(file_path) > 0:
 
                     sys.stdout.write("\r Checking %s... (%s/%s)" % (
-                            file_path.split("/")[-1], counter, total,
+                        file_path.split("/")[-1], counter, total,
                     ))
                     sys.stdout.flush()
                     meta = get_file_metadata(file_path, exif_gps_only=exif_gps_only)
@@ -835,6 +850,7 @@ try:
                         else:
                             action = "✔ Added"
                     else:
+                        print(meta)
                         if meta["lowest_distance"] is not None:
                             if meta["lowest_distance"] == 0:
                                 action = "- Duplicate of %s: (Image match: Exact) " % (
@@ -849,7 +865,6 @@ try:
                             action = "- Duplicate of %s: (File match) " % (
                                 meta["original"],
                             )
-                        
 
                     if (exif_gps_only and meta["is_image"]) or not exif_gps_only:
                         country_str = "Unknown"
@@ -1000,6 +1015,8 @@ try:
         for date in sorted(brain["date_country"].keys()):
             country = brain["date_country"][date]
             city = brain["date_city"][date]
+            if not city:
+                city = ""
             parsed_date = datetime.datetime.strptime(date, "%Y-%m-%d")
 
             if city != previous_city or country != previous_country:
