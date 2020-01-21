@@ -70,7 +70,9 @@ IMAGE_EXTENSIONS = [
     "crw",
     "dng",
 ]
-EXTENSIONS_TO_IGNORE = []
+EXTENSIONS_TO_IGNORE = [
+    "*.xml",
+]
 
 # Strings that might already be in the filename from previous systems, and what device to map them to.
 DEVICE_SUBSTRINGS = {
@@ -82,10 +84,22 @@ DEVICE_SUBSTRINGS = {
     "pixel": "pixel2",
     "300d": "digitalrebel",
     "htcevo": "htcevo",
+    "-F1C11A22": "switch",
 }
-# Unused
+
 DEVICE_REGEXES = {
-    
+    # 2018070223400200-F1C11A22FAEE3B82F21B330E1B786A39.mp4
+    "switch": "^[1-2][90]\d{12}00-[A-F0-9]{32}\.",
+
+}
+DATE_PARSERS = {
+    "switch": "^[1-2][90]\d{12}",
+    "import_script": "^[1-2][90]\d\d-\d\d\-\d\d_\d\d-\d\d-\d\d_",
+}
+DATE_FORMAT_PATTERNS = {
+    # 2018070223400200-F1C11A22FAEE3B82F21B330E1B786A39.mp4
+    "switch": "%Y%m%d%H%M%S",
+    "import_script": "%Y-%m-%d_%H-%M-%S_",
 }
 # Maps from the EXIF Camera Name to the device name you want to use.
 CAMERA_MODEL_MAPPINGS = {
@@ -96,8 +110,30 @@ CAMERA_MODEL_MAPPINGS = {
     "Canon EOS DIGITAL REBEL": "digitalrebel",
     "EVO": "htcevo",
     "iPhone 5s": "iphone5se",
+    "iPhone 5": "iphone5",
     "XT1049": "motox",
     "NIKON D600": "bonnienikon",
+    "HTC One X": "htconex_edna",
+    "Canon EOS REBEL T2i": "eosrebel_edna",
+    "Canon EOS REBEL T3": "eosrebelt3_edna",
+    "iPhone 6": "iphone6_edna",
+    "iPhone 7": "iphone7_edna",
+    "iPhone 6s": "iphone6s_edna",
+    "iPhone 6s Plus": "iphone6splus_edna",
+    "iPhone 6 Plus": "iphone6plus_edna",
+    "GT-I9505": "gti9505_edna",
+    "iPhone 4S": "iphone4s",
+    "iPad mini 2": "ipadmini2_edna",
+    "iPad Air": "ipadair",
+    "iPhone8,4": "iphonese",
+    "iPhone SE": "iphonese",
+    "SM-G900I": "smg900i_edna",
+    "FC7203": "haetori",
+    "HERO3+Silver Edition": "goprohero3silver",
+    "C905": "sonyericssonC905",
+    "iPhone6,1": "iphone5s",
+    "QCAM-AA": "htcevo",
+    "iPod touch": "ipodtouch",
 }
 # Maps device names to a prettier display format.
 DEVICE_DISPLAYNAME_MAPPINGS = {
@@ -110,11 +146,34 @@ DEVICE_DISPLAYNAME_MAPPINGS = {
     "htcevo": "HTC Evo",
     "unknown": "Unknown Device",
     "iphone5se": "iPhone 5 SE",
+    "iphone5": "iPhone 5 Edna",
     "motox": "Moto X",
     "osmomobile": "DJI Osmo Mobile",
     "bonnienikon": "Bonnie's Nikon D600",
+    "switch": "Nintendo Switch",
+    "htconex_edna": "HTC One X",
+    "eosrebel_edna": "EOS Rebel T2i Edna",
+    "eosrebelt3_edna": "EOS Rebel T3 Edna",
+    "iphone6_edna": "iPhone 6",
+    "iphone6s_edna": "iPhone 6s",
+    "iphone7_edna": "iPhone 7",
+    "iphone6splus_edna": "iPhone 6s Plus",
+    "iphone6plus_edna": "iPhone 6 Plus",
+    "gti9505_edna": "GT-I9505",
+    "iphone4s": "iPhone 4S",
+    "ipadmini2_edna": "iPad mini 2",
+    "smg900i_edna": "SM-G900I",
+    "iphonese": "iPhone SE",
+    "iphonese_japan": "iPhone SE Japan",
+    "goprohero3silver": "HERO3+Silver Edition",
+    "sonyericssonC905": "Sony Ericsson C905",
+    "ipadair": "iPad Air",
+    "iphone5s": "iPhone6,1",
+    "ipodtouch": "iPod Touch",
+
 }
 LOCATIONIQ_TOKEN = "e49f9326982f23"
+LOCATIONIQ_TOKEN = "1110c037a46791"
 
 COUNTRY_MAPPINGS = {
     "United States of America": "USA"
@@ -123,12 +182,23 @@ CITY_MAPPINGS = {
     "Autonomous City of Buenos Aires": "Buenos Aires",
     "Kyoto-shi": "Kyoto",
     "Corona de Tucson": "Tucson",
+    "Queenstown-Lakes": "Queenstown",
+}
+CITY_REPLACEMENTS = {
+    " District": "",
+}
+COUNTRY_REPLACEMENTS = {
 }
 USA_NAMES = [
     "United States of America",
     "USA",
     "US"
 ]
+PEOPLE = [
+    "edna",
+    "steven"
+]
+UNKNOWN_PLACE_NAME = "Unknown"
 MAXIMUM_THUMBNAIL_HASH_DISTANCE = 8
 MAXIMUM_IDENTICAL_HASH_DISTANCE = 1
 
@@ -208,7 +278,6 @@ try:
 
         return d + (m / 60.0) + (s / 3600.0)
 
-
     def md5_file(file_path):
         buffer_size = 1048576  # 1MB chunks
 
@@ -228,7 +297,7 @@ try:
         # img_size = 32
         # image = image.convert("L").resize((img_size, img_size), Image.ANTIALIAS)
         # pixels = numpy.asarray(image)
-        
+
         # image.save("/Users/skoczen/Desktop/%s" % file_path.replace(ARGS.source_dir, "").replace(".jpg", "-thumb.jpg") , "JPEG")
         # log_action(file_path)
         # log_action(pixels)
@@ -252,7 +321,6 @@ try:
             num /= 1024.0
         return "%.0f%s%s" % (num, 'Yi', suffix)
 
-
     def walk_tree(args):
         if not args.walk_dir:
             walk_dir = "."
@@ -266,7 +334,6 @@ try:
                 # if filename.endswith(".html") or filename.endswith(".xml"):
                 import_file(filename)
 
-
     def prepare_import_dir(args):
         global IMPORT_DIR
 
@@ -278,7 +345,6 @@ try:
         pathlib.Path(importer_dir).mkdir(parents=True, exist_ok=True)
         sys.stdout.write("done.")
         sys.stdout.flush()
-
 
     def import_file(source, dest, overwrite=False, dry_run=False):
         if dry_run:
@@ -293,7 +359,6 @@ try:
                 pass
             else:
                 raise PermissionError
-
 
     def get_local_file_list(source_dir):
         files = []
@@ -368,7 +433,7 @@ try:
         meta["is_image"] = extension.lower() in IMAGE_EXTENSIONS
 
         if exif_gps_only:
-            log_action("Checked %s." % meta["relative_file_path"] )
+            log_action("Checked %s." % meta["relative_file_path"])
 
         if exif_gps_only and not meta["is_image"]:
             return meta
@@ -376,8 +441,7 @@ try:
         # Capture Time.
         meta["datetime"] = None
         # Try to get from exif first.
-        try:
-            assert meta["is_image"]
+        if meta["is_image"]:
             try:
                 exif = piexif.load(file_path)
                 meta["Camera Model"] = exif["0th"][272].decode().replace("\x00", "")
@@ -395,18 +459,20 @@ try:
                 gps_latitude = exif["GPS"][2]
                 gps_ew = exif["GPS"][3].decode().upper()
                 gps_longitude = exif["GPS"][4]
-                
+
                 gps_sea_level = exif["GPS"][5]
                 gps_altitude = exif["GPS"][6]
 
                 # print(gps_altitude)
                 # print(gps_sea_level)
+                meta["sea_level"] = gps_sea_level
+                meta["altitude"] = gps_altitude
                 lat = None
                 lon = None
 
                 if gps_latitude and gps_ns and gps_longitude and gps_ew:
                     lat = convert_to_degrees(gps_latitude)
-                    if gps_ns != "N":                     
+                    if gps_ns != "N":
                         lat = 0 - lat
 
                     lon = convert_to_degrees(gps_longitude)
@@ -428,7 +494,7 @@ try:
                         k, v = line.split(": ")
                         exif_dict[k.strip()] = v.strip()
                     except:
-                        log_action("Skipping %s" %  line )
+                        log_action("Skipping %s" % line)
 
                 try:
                     meta["Camera Model"] = exif_dict["Camera Model Name"]
@@ -438,25 +504,119 @@ try:
                     meta["exiftime"] = datetime.datetime.strptime(exif_dict["Date/Time Original"].split(".")[0], "%Y:%m:%d %H:%M:%S")
                 except Exception as e:
                     # pprint(exif_dict)
-                    log_action("Failed to extract any EXIF from %s" % file_path)
-                    log_action("Exif: %s" % exif_dict)
-                    meta["error"] = "❗Failed to extract any EXIF."
-                    if "datetime" not in meta or not meta["datetime"]:
-                        meta["datetime"] = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
-                    # raise e
+                    device_found = False
+                    for device, r in DEVICE_REGEXES.items():
+                        meta["device"] = device
+                        device_found = True
+                        break
+
+                    for substring, device in DEVICE_SUBSTRINGS.items():
+                        if substring in file_path.split("/")[-1]:
+                            meta["device"] = device
+                            device_found = True
+                            break
+
+                    if device_found:
+                        # We're just using the local time because we don't know. Try to parse it from the filename.
+                        if device in DATE_FORMAT_PATTERNS and device in DATE_PARSERS:
+                            try:
+                                matches = re.findall(DATE_PARSERS[device], meta["file_name"])
+                                if matches:
+                                    parsed_time = datetime.datetime.strptime(matches[0], DATE_FORMAT_PATTERNS[device])
+                                    meta["datetime"] = parsed_time
+                                    log_action("Replaced datetime with known time parsing for %s: %s" % (device, meta["datetime"]))
+                            except ValueError:
+                                # Rarely, a file will start with a match, but it's really just a random assortment of hex.
+                                pass
+                            except Exception as e:
+                                print(device)
+                                print(DATE_FORMAT_PATTERNS[device])
+                                print(matches)
+                                print(matches[0])
+                                raise e
+                    else:
+                        log_action("Failed to extract any EXIF or find device match from %s" % file_path)
+                        log_action("Exif: %s" % exif_dict)
+                        meta["error"] = "❗Failed to extract any EXIF."
+                        if "datetime" not in meta or not meta["datetime"]:
+                            meta["datetime"] = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
+                        # raise e
             # print("extracted EXIF")
             # print(meta)
 
-        except AssertionError:
+        else:
             if exif_gps_only:
                 return meta
-            # Fallback to mtime
-            meta["datetime"] = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
+
+            device_found = False
+            for device, r in DEVICE_REGEXES.items():
+                device_found = True
+                break
+
+            for substring, device in DEVICE_SUBSTRINGS.items():
+                if substring in file_path.split("/")[-1]:
+                    meta["device"] = device
+                    device_found = True
+                    break
+
+            if device_found:
+                # print("found device: %s" % device)
+                # We're just using the local time because we don't know. Try to parse it from the filename.
+                if device in DATE_FORMAT_PATTERNS and device in DATE_PARSERS:
+                    try:
+                        matches = re.findall(DATE_PARSERS[device], meta["file_name"])
+                        if matches:
+                            parsed_time = datetime.datetime.strptime(matches[0], DATE_FORMAT_PATTERNS[device])
+                            meta["datetime"] = parsed_time
+                            log_action("Replaced datetime with known time parsing for %s: %s" % (device, meta["datetime"]))
+                    except ValueError:
+                        # Rarely, a file will start with a match, but it's really just a random assortment of hex.
+                        pass
+                    except Exception as e:
+                        print(device)
+                        print(DATE_FORMAT_PATTERNS[device])
+                        print(matches)
+                        print(matches[0])
+                        raise e
+            else:
+                # Fallback to mtime
+                meta["datetime"] = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
 
         meta["mtime"] = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
 
+        if "datetime" not in meta or not meta["datetime"]:
+            # Try to parse out the date from the filename
+            for device, pattern in DATE_FORMAT_PATTERNS.items():
+                try:
+                    matches = re.findall(DATE_PARSERS[device], meta["file_name"])
+                    if matches:
+                        parsed_time = datetime.datetime.strptime(matches[0], DATE_FORMAT_PATTERNS[device])
+                        meta["datetime"] = parsed_time
+                        log_action("Replaced datetime with known time parsing for %s: %s" % (device, meta["datetime"]))
+                except ValueError:
+                    # Rarely, a file will start with a match, but it's really just a random assortment of hex.
+                    pass
+                except Exception as e:
+                    print(device)
+                    print(DATE_FORMAT_PATTERNS[device])
+                    print(matches)
+                    print(matches[0])
+                    raise e
+
+        # That failed too?  Just use file modification time and hope for the best.
+        if "datetime" not in meta or not meta["datetime"]:
+            meta["datetime"] = meta["mtime"]
+
+        # Device it was captured on
+        if (
+            "Camera Model" in meta and
+            meta["Camera Model"] in CAMERA_MODEL_MAPPINGS and
+            meta["Camera Model"] is not None
+        ):
+            meta["device"] = CAMERA_MODEL_MAPPINGS[meta["Camera Model"]]
+
         try:
-            if meta["is_image"] and not "width" in meta:
+            if meta["is_image"] and "width" not in meta:
                 with Image.open(file_path) as im:
                     meta["width"], meta["height"] = im.size
                     meta["width"] = int(meta["width"])
@@ -466,11 +626,19 @@ try:
             meta["failed"] = "❗Failed to read image at %s. It might be corrupt, please check and try again."
             return meta
 
-        date_str = meta["datetime"].strftime("%Y-%m-%d")
-        month_str = meta["datetime"].strftime("%Y-%m")
+        meta["person"] = "steven"
+        if "device" in meta and "edna" in meta["device"]:
+            meta["person"] = "edna"
 
+        date_str = "%s%s" % (
+            meta["person"],
+            meta["datetime"].strftime("%Y-%m-%d"),
+        )
+        month_str = "%s%s" % (
+            meta["person"],
+            meta["datetime"].strftime("%Y-%m"),
+        )
 
-        meta["city"] = None
         # Country of Capture
         opened = False
         # If it's missing and we can get it via EXIF GPS, do it.
@@ -482,16 +650,19 @@ try:
             brain["date_city"][date_str] = brain["date_city"][date_str]
 
         elif (
-            (date_str not in brain["date_country"] or
-            date_str not in brain["date_city"]) and
+            (
+                date_str not in brain["date_country"] or
+                date_str not in brain["date_city"]
+            ) and
             "lat" in meta and
             "lon" in meta
         ):
             retry = True
             while retry:
-                print("Checking Online Reverse Geocode...")
+                print(" - Checking Online Reverse Geocode (%s%s).." % (meta["lat"], meta["lon"],))
+
                 resp = requests.get(
-                    "https://us1.locationiq.com/v1/reverse.php?key=%s&lat=%s&lon=%s&format=json" % 
+                    "https://us1.locationiq.com/v1/reverse.php?key=%s&lat=%s&lon=%s&format=json" %
                     (
                         LOCATIONIQ_TOKEN,
                         meta["lat"],
@@ -507,21 +678,29 @@ try:
                         country = resp.json()["address"]["country"]
                         if "city" in resp.json()["address"]:
                             city = resp.json()["address"]["city"]
-                        elif "county" in resp.json():
+                        elif "county" in resp.json()["address"]:
                             city = resp.json()["address"]["county"]
-                        
+
                         if "state" in resp.json()["address"]:
                             meta["state"] = resp.json()["address"]["state"]
                             brain["date_state"][date_str] = resp.json()["address"]["state"]
+                            if not city:
+                                city = meta["state"]
 
-                     
-                        meta["country"] = country
-                        brain["date_country"][date_str] = country
+                        if not city:
+                            print("found address, but no city:")
+                            print(resp.json())
+                        if country:
+                            meta["country"] = country
+                            brain["date_country"][date_str] = country
                         if city:
                             meta["city"] = city
-                        brain["date_city"][date_str] = city
+                            brain["date_city"][date_str] = city
                 except Exception as e:
+                    print(resp.json())
                     if "error" in resp.json() and "Rate Limit" in resp.json()["error"]:
+                        if resp.json()["error"] == "Rate Limited Day":
+                            raise Exception("Geolocation rate-limited for today.  Either buy a subscription or wait until tomorrow.")
                         retry = True
                         time.sleep(15)
                         log_action("Rate limited.  Waiting 15 seconds...")
@@ -531,19 +710,6 @@ try:
                         print(resp.json())
 
                         raise e
-    
-
-        # Device it was captured on
-        if "Camera Model" in meta and meta["Camera Model"].strip() in CAMERA_MODEL_MAPPINGS:
-            meta["device"] = CAMERA_MODEL_MAPPINGS[meta["Camera Model"].strip()]
-        
-        else:
-            for device, r in DEVICE_REGEXES.items():
-                pass
-
-            for substring, device in DEVICE_SUBSTRINGS.items():
-                if substring in file_path.split("/")[-1]:
-                    meta["device"] = device
 
         if "device" not in meta or not meta["device"]:
             exif_camera = None
@@ -559,7 +725,7 @@ try:
             else:
                 print(meta)
                 print(CAMERA_MODEL_MAPPINGS)
-                print("Camera Model" in meta )
+                print("Camera Model" in meta)
                 print(meta["Camera Model"].strip() in CAMERA_MODEL_MAPPINGS)
                 raise Exception(error_str)
 
@@ -576,13 +742,15 @@ try:
                 os.system("open %s" % file_path.replace(" ", "\\ "))
 
             previous = None
-            for d in sorted(brain["date_country"].keys(), reverse=True):
-                if d < date_str:
+            for d in sorted(brain["date_country"].keys(), reverse=False):
+                # print("%s < %s  | %s" % (d, date_str, previous))
+                if d >= date_str:
                     if not previous:
-                        previous = brain["date_country"][d]        
+                        previous = brain["date_country"][d]
                     break
                 previous = brain["date_country"][d]
-            country = input("\n   What country is this from, on %s? [%s] " % (
+            country = input("\n   %s, what country is this from, on %s? [%s] " % (
+                meta["person"].title(),
                 meta["datetime"].strftime("%B %d, %Y"),
                 previous,
             )).strip()
@@ -593,22 +761,26 @@ try:
             opened = True
 
         # City of Capture
-        if not meta["city"]:
+        if "city" not in meta or not meta["city"]:
+            if exif_gps_only:
+                return meta
             if date_str in brain["date_city"]:
                 meta["city"] = brain["date_city"][date_str]
             else:
                 if not opened:
-                    os.system("open %s" % file_path.replace(" ", "\\ ")) 
+                    os.system("open %s" % file_path.replace(" ", "\\ "))
                     opened = True
-                
+
                 previous = None
-                for d in sorted(brain["date_city"].keys(), reverse=True):
-                    if d < date_str:
+                # print("%s < %s  | City %s" % (d, date_str, previous))
+                for d in sorted(brain["date_city"].keys(), reverse=False):
+                    if d >= date_str:
                         if not previous:
-                            previous = brain["date_city"][d]        
+                            previous = brain["date_city"][d]
                         break
                     previous = brain["date_city"][d]
-                city = input("   What city is this from, on %s? [%s] " % (
+                city = input("   %s, what city is this from, on %s? [%s] " % (
+                    meta["person"].title(),
                     meta["datetime"].strftime("%B %d, %Y"),
                     previous,
                 )).strip()
@@ -623,14 +795,15 @@ try:
             else:
                 brain["date_state"][date_str] = "Adding.."
                 previous = None
-                for d in sorted(brain["date_state"].keys(), reverse=True):
-                    if d < date_str:
+                for d in sorted(brain["date_state"].keys(), reverse=False):
+                    if d >= date_str:
                         if not previous:
-                            previous = brain["date_state"][d]        
+                            previous = brain["date_state"][d]
                         break
                     previous = brain["date_state"][d]
 
-                state = input("   What state is this from, on %s? [%s] " % (
+                state = input("   %s, what state is this from, on %s? [%s] " % (
+                    meta["person"].title(),
                     meta["datetime"].strftime("%B %d, %Y"),
                     previous,
                 )).strip()
@@ -639,32 +812,41 @@ try:
                 meta["state"] = state
                 brain["date_state"][date_str] = state
 
+        for needle, replacement in COUNTRY_REPLACEMENTS.items():
+            meta["country"] = meta["country"].replace(needle, replacement)
+        meta["country"] = meta["country"].strip()
+
         if meta["country"] in COUNTRY_MAPPINGS:
             meta["country"] = COUNTRY_MAPPINGS[meta["country"]]
-        
+
         if meta["country"] in USA_NAMES and meta["datetime"].year < 2014:
             if month_str not in brain["month_country"]:
-                brain["month_country"][month_str] = [meta["state"], ]        
+                brain["month_country"][month_str] = [meta["state"], ]
             elif meta["state"] not in brain["month_country"][month_str]:
                 brain["month_country"][month_str].append(meta["state"])
 
         else:
             if month_str not in brain["month_country"]:
-                brain["month_country"][month_str] = [meta["country"], ]        
+                brain["month_country"][month_str] = [meta["country"], ]
             elif meta["country"] not in brain["month_country"][month_str]:
                 brain["month_country"][month_str].append(meta["country"])
-
-
 
         if brain["date_city"][date_str] in CITY_MAPPINGS:
             brain["date_city"][date_str] = CITY_MAPPINGS[brain["date_city"][date_str]]
 
+        if meta["city"] is None:
+            meta["city"] = UNKNOWN_PLACE_NAME
+        else:
+            for needle, replacement in CITY_REPLACEMENTS.items():
+                meta["city"] = meta["city"].replace(needle, replacement)
+            meta["city"] = meta["city"].strip()
+
         if meta["city"] in CITY_MAPPINGS:
             meta["city"] = CITY_MAPPINGS[meta["city"]]
 
-         # 2016  / 03 - Argentina, Colombia  / 16 - Medellin  / 2016-01-03_10-55-22_dragonfly_medellin_colombia_IMG_12343.JPG 
-         # 2019/10 - Japan, Poland/ 20 - Tokyo  / 2019-10-20_09-55-12_haetori_tokyo_japan_DJI_0727.MP4 
-         # 2019 /12 - Japan, New Zealand /16 - Auckland/2019-12-16_15-32-43_pocket_auckland_new-zealand_DJI_1234.MP4
+        # 2016  / 03 - Argentina, Colombia  / 16 - Medellin  / 2016-01-03_10-55-22_dragonfly_medellin_colombia_IMG_12343.JPG
+        # 2019/10 - Japan, Poland/ 20 - Tokyo  / 2019-10-20_09-55-12_haetori_tokyo_japan_DJI_0727.MP4
+        # 2019 /12 - Japan, New Zealand /16 - Auckland/2019-12-16_15-32-43_pocket_auckland_new-zealand_DJI_1234.MP4
         meta["datetimestr"] = "%s_%02d-%02d-%02d" % (
             meta["datetime"].strftime("%Y-%m-%d"),
             meta["datetime"].hour,
@@ -692,14 +874,18 @@ try:
         if needed_cleanup:
             meta['cleaned_name'] = re.sub(r"\A%s-\d\d-\d\d_\d\d-\d\d-\d\d_" % meta["datetime"].year, '', meta['cleaned_name'])
 
+        meta["person"] = "steven"
+        if "edna" in meta["device"]:
+            meta["person"] = "edna"
 
         meta["canonical_name"] = "%(datetimestr)s_%(device)s_%(city)s_%(country)s__%(cleaned_name)s" % meta
         meta["canonical_path"] = os.path.join(
+            meta["person"],
             "%s" % meta["datetime"].year,
             "%02d - %s" % (meta["datetime"].month, ", ".join(brain["month_country"][month_str])),
             "%02d - %s" % (meta["datetime"].day, brain["date_city"][date_str]),
         )
-        
+
         meta["lowest_distance"] = None
         meta["lowest_distance_from"] = None
         if not exif_gps_only:
@@ -714,14 +900,24 @@ try:
                             # print(ih)
                             # print(meta["imagehash"])
                             for rotation_hash in meta["imagehashes"]:
-                                distance = photohash.hash_distance(rotation_hash, ih)
-                                # print("   %s - %s - %s" % (ih, brain["imagehashes"][ih]["relative_file_path"], distance))
-                                if distance < lowest_distance:
-                                    lowest_distance = distance
-                                    lowest_hash = ih
-                                    meta["lowest_distance_from"] = brain["imagehashes"][ih]["relative_file_path"]
+                                try:
+                                    distance = photohash.hash_distance(rotation_hash, ih)
+                                    # print("   %s - %s - %s" % (ih, brain["imagehashes"][ih]["relative_file_path"], distance))
+                                    if distance < lowest_distance:
+                                        lowest_distance = distance
+                                        lowest_hash = ih
+                                        meta["lowest_distance_from"] = brain["imagehashes"][ih]["relative_file_path"]
+                                        meta["lowest_distance"] = lowest_distance
+                                except Exception as e:
+                                    print("\n\n\nerror comparing hashes")
+                                    print(rotation_hash)
+                                    print(meta)
+                                    print("\n")
+                                    print(ih)
+                                    print(brain["imagehashes"][ih])
+                                    print("\n\ndone")
+                                    raise e
 
-                    meta["lowest_distance"] = lowest_distance
                     log_action(meta)
                     if lowest_hash:
                         lowest_hash_image = brain["imagehashes"][lowest_hash]
@@ -745,7 +941,7 @@ try:
                             # Clear all matching hashes
                             for hash_to_delete in brain["imagehashes"][lowest_hash]["imagehashes"]:
                                 del brain["imagehashes"][hash_to_delete]
-                            
+
                             meta["result"] = "valid"
                             meta["original"] = meta["relative_file_path"]
                             log_action("Added %s to the list of files and removed lower-resolution duplicate %s" % (
@@ -772,14 +968,14 @@ try:
                             meta["imagehashes"],
                         ))
                 except Exception as e:
-                    log_action("Failed to imagehash %s. Falling back to file hash." % meta["relative_file_path"] )
+                    log_action("Failed to imagehash %s. Falling back to file hash." % meta["relative_file_path"])
                     try:
                         log_action(traceback.format_exc())
                     except:
                         pass
                     # raise e
 
-            if not "imagehashes" in meta:
+            if "imagehashes" not in meta:
                 meta["filesize"] = os.path.getsize(meta["file_path"])
                 namesize_hash = "file%s" % meta["filesize"]
                 if namesize_hash in brain["imagehashes"]:
@@ -791,16 +987,16 @@ try:
 
                     if meta["md5"] != brain["imagehashes"][namesize_hash]["md5"]:
                         # We have mismatching files.
-                        namesize_hash = "%s__%s" % (meta["md5"], meta["filesize"],)
+                        namesize_hash = "file%s__%s" % (meta["md5"], meta["filesize"],)
                         brain["imagehashes"][namesize_hash] = meta
                         meta["result"] = "valid"
-                        log_action("Added %s to the list of files." % meta["relative_file_path"] )
+                        log_action("Added %s to the list of files." % meta["relative_file_path"])
                     else:
                         # Check and choose the older file.
                         if meta["mtime"] < brain["imagehashes"][namesize_hash]["mtime"]:
                             brain["imagehashes"][namesize_hash] = meta
                             meta["result"] = "valid"
-                            log_action("Added %s to the list of files." % meta["relative_file_path"] )
+                            log_action("Added %s to the list of files." % meta["relative_file_path"])
                         else:
                             meta["result"] = "duplicate"
                             meta["original"] = brain["imagehashes"][namesize_hash]["relative_file_path"]
@@ -829,6 +1025,7 @@ try:
                     total_size += os.path.getsize(file_path)
 
             for file_path in file_list:
+                meta = None
                 if not ignored(file_path) and os.path.getsize(file_path) > 0:
 
                     sys.stdout.write("\r Checking %s... (%s/%s)" % (
@@ -850,7 +1047,7 @@ try:
                         else:
                             action = "✔ Added"
                     else:
-                        print(meta)
+                        # print(meta)
                         if meta["lowest_distance"] is not None:
                             if meta["lowest_distance"] == 0:
                                 action = "- Duplicate of %s: (Image match: Exact) " % (
@@ -871,7 +1068,7 @@ try:
                         if "country" in meta:
                             country_str = meta["country"]
                         city_str = "Unknown"
-                        if "city" in meta:
+                        if "city" in meta and meta["city"] is not None:
                             city_str = meta["city"]
 
                         error_str = ""
@@ -879,15 +1076,28 @@ try:
                             error_str = meta["error"]
                         try:
                             if "failed" not in meta:
-                                sys.stdout.write("\r%s %s. %s (%s) from %s, %s %s\n" % (
-                                    action,
-                                    meta["relative_file_path"],
-                                    DEVICE_DISPLAYNAME_MAPPINGS[meta["device"]],
-                                    meta["device"],
-                                    city_str,
-                                    country_str,
-                                    error_str,
-                                ))
+                                if exif_gps_only and (country_str == "Unknown" or city_str == "Unknown"):
+                                    sys.stdout.write("\r%s %s. %s (%s) %s\n" % (
+                                        action,
+                                        meta["relative_file_path"],
+                                        DEVICE_DISPLAYNAME_MAPPINGS[meta["device"]],
+                                        meta["device"],
+                                        error_str,
+                                    ))
+                                else:
+                                    sys.stdout.write("\r%s %s. %s (%s) from %s, %s %s\n" % (
+                                        action,
+                                        meta["relative_file_path"],
+                                        DEVICE_DISPLAYNAME_MAPPINGS[meta["device"]],
+                                        meta["device"],
+                                        city_str,
+                                        country_str,
+                                        error_str,
+                                    ))
+
+                                if not exif_gps_only and (country_str == "Unknown" or city_str == "Unknown"):
+                                    print(meta)
+                                    pass
                             else:
                                 sys.stdout.write("\r%s %s\n" % (
                                     action,
@@ -905,13 +1115,17 @@ try:
                     sys.stdout.flush()
                 else:
                     if exif_gps_only:
-                        print("x Ignored %s" % meta["relative_file_path"])
+                        if meta:
+                            print("x Ignored %s" % meta["relative_file_path"])
+                        else:
+                            print("x Ignored %s" % file_path)
+
                     pass
                 counter += 1
         else:
             print("❌ %s empty or not found on the %s" % (source_dir, DEVICE_NAME))
 
-    
+
     def copy_files(imagehash_list, dry_run=False):
         counter = 1
         total = len(imagehash_list.keys())
@@ -937,10 +1151,16 @@ try:
                 ))
                 sys.stdout.flush()
 
-                file_import_dir = os.path.join(IMPORT_DIR, meta["canonical_path"])
+                date_str = meta["datetime"].strftime("%Y-%m-%d")
+                month_str = meta["datetime"].strftime("%Y-%m")
+                updated_canonical_path = os.path.join(
+                    "%s" % meta["datetime"].year,
+                    "%02d - %s" % (meta["datetime"].month, ", ".join(brain["month_country"][month_str])),
+                    "%02d - %s" % (meta["datetime"].day, brain["date_city"][date_str]),
+                )
+                file_import_dir = os.path.join(IMPORT_DIR, updated_canonical_path)
                 pathlib.Path(file_import_dir).mkdir(parents=True, exist_ok=True)
                 dest_file = os.path.join(file_import_dir, meta["canonical_name"])
-
 
                 if not os.path.isfile(dest_file) or os.path.getsize(file_path) != os.path.getsize(dest_file):
                     sys.stdout.write("\r Importing %s... (%s/%s) %s/%s (%.1f %%) %s ETA" % (
@@ -1003,52 +1223,55 @@ try:
 
 
     def write_travel_history():
-        travel_history = "Travel History, from my Photos\n"
-        previous_city = None
-        previous_country = None
-        previous_date = None
-        second_previous_city = None
-        second_previous_country = None
-        second_previous_date = None
+        for p in PEOPLE:
+            travel_history = "Travel History, from my Photos\n"
+            previous_city = None
+            previous_country = None
+            previous_date = None
+            second_previous_city = None
+            second_previous_country = None
+            second_previous_date = None
 
-        travel_history_csv = "Year, Month, Day, Country, City, Days\n"
-        for date in sorted(brain["date_country"].keys()):
-            country = brain["date_country"][date]
-            city = brain["date_city"][date]
-            if not city:
-                city = ""
-            parsed_date = datetime.datetime.strptime(date, "%Y-%m-%d")
+            travel_history_csv = "Year, Month, Day, Country, City, Days\n"
+            for date in sorted(brain["date_country"].keys()):
+                country = brain["date_country"][date]
+                city = brain["date_city"][date]
+                if not city:
+                    city = ""
+                non_person_date = date
+                for replace_p in PEOPLE:
+                    non_person_date = non_person_date.replace(replace_p, "")
+                parsed_date = datetime.datetime.strptime(non_person_date, "%Y-%m-%d")
 
-            if city != previous_city or country != previous_country:
-                if previous_date and second_previous_date:
-                    days = (previous_date - second_previous_date).days
-                else:
-                    days = 0
+                if city != previous_city or country != previous_country:
+                    if previous_date and second_previous_date:
+                        days = (previous_date - second_previous_date).days
+                    else:
+                        days = 0
 
-                travel_history += "%s - %s, %s (%s days)\n" % (date, city, country, days)
-                travel_history_csv += "%s, %s, %s, %s, %s, %s\n" % (
-                    int(date.split("-")[0]),
-                    int(date.split("-")[1]),
-                    int(date.split("-")[2]),
-                    country.replace(",", "\\,"),
-                    city.replace(",", "\\,"),
-                    days,
-                )
-                second_previous_city = previous_city
-                second_previous_country = previous_country
-                second_previous_date = previous_date
-                previous_city = city
-                previous_country = country
-                previous_date = parsed_date
+                    travel_history += "%s - %s, %s (%s days)\n" % (date, city, country, days)
+                    travel_history_csv += "%s, %s, %s, %s, %s, %s\n" % (
+                        int(non_person_date.split("-")[0]),
+                        int(non_person_date.split("-")[1]),
+                        int(non_person_date.split("-")[2]),
+                        country.replace(",", "\\,"),
+                        city.replace(",", "\\,"),
+                        days,
+                    )
+                    second_previous_city = previous_city
+                    second_previous_country = previous_country
+                    second_previous_date = previous_date
+                    previous_city = city
+                    previous_country = country
+                    previous_date = parsed_date
 
-        
-        with open('travel-history-%s.log' % now_str, "w+") as f:
-            f.write(travel_history)
-            print(" - travel-history-%s.log" % now_str)
+            with open('%s-travel-history-%s.log' % (p, now_str), "w+") as f:
+                f.write(travel_history)
+                print(" - travel-history-%s.log" % now_str)
 
-        with open('travel-history-%s.csv' % now_str, "w+") as f:
-            f.write(travel_history_csv)
-            print(" - travel-history-%s.csv" % now_str)
+            with open('%s-travel-history-%s.csv' % (p, now_str), "w+") as f:
+                f.write(travel_history_csv)
+                print(" - travel-history-%s.csv" % now_str)
 
     def cli():
         global ARGS
@@ -1057,8 +1280,7 @@ try:
 
         parser = argparse.ArgumentParser(description='Importer project')
         parser.add_argument('source_dir', metavar='source_dir', type=str, help='What directory to import from?')
-        parser.add_argument('destination', metavar='destination', type=str, help='What volume to import to? e.g. ./output/'
-        )
+        parser.add_argument('destination', metavar='destination', type=str, help='What volume to import to? e.g. ./output/')
         parser.add_argument(
             '--keep-history', action='store_true',
             help="Keep import history."
@@ -1090,6 +1312,7 @@ try:
             print("✔ Clearing Locations.")
             brain["date_country"] = {}
             brain["date_city"] = {}
+            brain["date_state"] = {}
             brain["month_country"] = {}
 
         args.full_source_path = os.path.abspath(args.source_dir)
