@@ -134,6 +134,10 @@ CAMERA_MODEL_MAPPINGS = {
     "iPhone6,1": "iphone5s",
     "QCAM-AA": "htcevo",
     "iPod touch": "ipodtouch",
+    "HTC One V": "htconev",
+    "One V": "htconev",
+    "SM-G900T": "samsunggalaxys5",
+    "Canon PowerShot A630": "canona630",
 }
 # Maps device names to a prettier display format.
 DEVICE_DISPLAYNAME_MAPPINGS = {
@@ -170,6 +174,9 @@ DEVICE_DISPLAYNAME_MAPPINGS = {
     "ipadair": "iPad Air",
     "iphone5s": "iPhone6,1",
     "ipodtouch": "iPod Touch",
+    "htconev": "HTC One V",
+    "samsunggalaxys5": "Samsung Galaxy S5",
+    "canona630": "Canon PowerShot A630",
 
 }
 LOCATIONIQ_TOKEN = "e49f9326982f23"
