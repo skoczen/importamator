@@ -95,11 +95,13 @@ DEVICE_REGEXES = {
 DATE_PARSERS = {
     "switch": "^[1-2][90]\d{12}",
     "import_script": "^[1-2][90]\d\d-\d\d\-\d\d_\d\d-\d\d-\d\d_",
+    "older_camera": "^[1-2][90]\d\d-\d\d\-\d\d \d\d\.\d\d\.\d\d\.",
 }
 DATE_FORMAT_PATTERNS = {
     # 2018070223400200-F1C11A22FAEE3B82F21B330E1B786A39.mp4
     "switch": "%Y%m%d%H%M%S",
     "import_script": "%Y-%m-%d_%H-%M-%S_",
+    "older_camera": "%Y-%m-%d %H.%M.%S.",
 }
 # Maps from the EXIF Camera Name to the device name you want to use.
 CAMERA_MODEL_MAPPINGS = {
@@ -138,7 +140,17 @@ CAMERA_MODEL_MAPPINGS = {
     "One V": "htconev",
     "SM-G900T": "samsunggalaxys5",
     "Canon PowerShot A630": "canona630",
+    "PC36100": "htcevo4g",
+    "iPad 2": "ipad2",
+    "The Pinhole": "thepinhole",
+    "Xolaroid 2000": "htcevo4g",
+    "CYBERSHOT": "sonycybershot",
+    "The Little Orange Box": "htcevo4g",
+    "The Baerbl": "htcevo4g",
+    "The FudgeCan": "htcevo4g",
+    "NIKON D7000": "nikond7000",
 }
+EXTRA_CAMERA_MAPPINGS = {}
 # Maps device names to a prettier display format.
 DEVICE_DISPLAYNAME_MAPPINGS = {
     "sonya10": "Sony PCM-A10",
@@ -177,6 +189,12 @@ DEVICE_DISPLAYNAME_MAPPINGS = {
     "htconev": "HTC One V",
     "samsunggalaxys5": "Samsung Galaxy S5",
     "canona630": "Canon PowerShot A630",
+    "htcevo4g": "HTC Evo 4G",
+    "ipad2": "iPad 2",
+    "thepinhole": "The Pinhole",
+    "xolaroid2000": "Xolaroid 2000",
+    "sonycybershot": "Sony Cybershot",
+    "nikond7000": "Nikon D7000",
 
 }
 LOCATIONIQ_TOKEN = "e49f9326982f23"
@@ -494,16 +512,16 @@ try:
                 # Use exiftool - `brew install exiftool`
                 # Or https://exiftool.org/
                 log_action("Falling back to exiftool for %s" % file_path)
-                result = subprocess.run(['exiftool', file_path], stdout=subprocess.PIPE)
-                exif_dict = {}
-                for line in result.stdout.decode().split("\n"):
-                    try:
-                        k, v = line.split(": ")
-                        exif_dict[k.strip()] = v.strip()
-                    except:
-                        log_action("Skipping %s" % line)
-
                 try:
+                    result = subprocess.run(['exiftool', file_path], stdout=subprocess.PIPE)
+                    exif_dict = {}
+                    for line in result.stdout.decode().split("\n"):
+                        try:
+                            k, v = line.split(": ")
+                            exif_dict[k.strip()] = v.strip()
+                        except:
+                            log_action("Skipping %s" % line)
+
                     meta["Camera Model"] = exif_dict["Camera Model Name"]
                     meta["width"] = int(exif_dict['Image Width'])
                     meta["height"] = int(exif_dict['Image Height'])
@@ -513,8 +531,10 @@ try:
                     # pprint(exif_dict)
                     device_found = False
                     for device, r in DEVICE_REGEXES.items():
-                        meta["device"] = device
-                        device_found = True
+                        matches = re.findall(r, meta["file_name"])
+                        if matches:
+                            meta["device"] = device
+                            device_found = True
                         break
 
                     for substring, device in DEVICE_SUBSTRINGS.items():
@@ -557,7 +577,10 @@ try:
 
             device_found = False
             for device, r in DEVICE_REGEXES.items():
-                device_found = True
+                matches = re.findall(r, meta["file_name"])
+                if matches:
+                    meta["device"] = device
+                    device_found = True
                 break
 
             for substring, device in DEVICE_SUBSTRINGS.items():
@@ -615,12 +638,18 @@ try:
             meta["datetime"] = meta["mtime"]
 
         # Device it was captured on
-        if (
-            "Camera Model" in meta and
-            meta["Camera Model"] in CAMERA_MODEL_MAPPINGS and
-            meta["Camera Model"] is not None
-        ):
-            meta["device"] = CAMERA_MODEL_MAPPINGS[meta["Camera Model"]]
+        if "Camera Model" in meta:
+            if (
+                meta["Camera Model"] in CAMERA_MODEL_MAPPINGS and
+                meta["Camera Model"] is not None
+            ):
+                meta["device"] = CAMERA_MODEL_MAPPINGS[meta["Camera Model"]]
+            else:
+                camera_key = meta["Camera Model"].lower().replace(" ", "_")
+                EXTRA_CAMERA_MAPPINGS[camera_key] = meta["Camera Model"]
+                CAMERA_MODEL_MAPPINGS[meta["Camera Model"]] = camera_key
+                DEVICE_DISPLAYNAME_MAPPINGS[camera_key] = meta["Camera Model"]
+                meta["device"] = CAMERA_MODEL_MAPPINGS[meta["Camera Model"]]
 
         try:
             if meta["is_image"] and "width" not in meta:
@@ -1226,6 +1255,12 @@ try:
     def write_import_log():
         with open('import-%s.log' % now_str, "w+") as f:
             f.write(action_log)
+            if EXTRA_CAMERA_MAPPINGS != {}:
+                f.write("\n Autogenerated Missing Camera Mappings:")
+                print("\n Autogenerated Missing Camera Mappings:")
+                for key, model in EXTRA_CAMERA_MAPPINGS.items():
+                    f.write("%s - %s" % (key, model))
+                    print("%s - %s" % (key, model))
             print(" - import-%s.log" % now_str)
 
 
