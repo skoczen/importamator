@@ -46,18 +46,28 @@ EXTENSIONS_TO_IMPORT = [
     "dng",
     "wav",
     "mp3",
+    "aiff",
+    "pdf",
+    "psd",
+    "GIS",
 ]
 PARTIALS_TO_IGNORE = [
     "tmp",
     "idx",
-    # ".thumbnails",
+    ".thumbnails",
     "fseventsd-uuid",
     "shadowIndex",
     "StoreFile",
     "live.0",
     ".Spotlight",
-    ".DS_Store"
+    ".DS_Store",
+    ".plist",
     # "~",
+    "Generated Images.bundle",  # Mylio
+    "Anki",  # Mylio
+    "1Password",  # Mylio
+    ".MYLock",  # Mylio
+    ".graffle",  # Mylio
 ]
 IMAGE_EXTENSIONS = [
     "jpg",
@@ -71,7 +81,9 @@ IMAGE_EXTENSIONS = [
     "dng",
 ]
 EXTENSIONS_TO_IGNORE = [
-    "*.xml",
+    "xmp",
+    "xml",
+    "plist",
 ]
 
 # Strings that might already be in the filename from previous systems, and what device to map them to.
@@ -95,13 +107,17 @@ DEVICE_REGEXES = {
 DATE_PARSERS = {
     "switch": "^[1-2][90]\d{12}",
     "import_script": "^[1-2][90]\d\d-\d\d\-\d\d_\d\d-\d\d-\d\d_",
-    "older_camera": "^[1-2][90]\d\d-\d\d\-\d\d \d\d\.\d\d\.\d\d\.",
+    "older_camera": "^[1-2][90]\d\d-\d\d\-\d\d \d\d\.\d\d\.\d\d",
+    "older_video": "^[1-2][90]\d\d-\d\d\-\d\d \d\d\.\d\d",
+    "pixel_video": "^VID_[1-2][90]\d\d\d\d\d\d_\d\d\d\d\d\d\.",
 }
 DATE_FORMAT_PATTERNS = {
     # 2018070223400200-F1C11A22FAEE3B82F21B330E1B786A39.mp4
     "switch": "%Y%m%d%H%M%S",
     "import_script": "%Y-%m-%d_%H-%M-%S_",
-    "older_camera": "%Y-%m-%d %H.%M.%S.",
+    "older_camera": "%Y-%m-%d %H.%M.%S",
+    "older_video": "%Y-%m-%d %H.%M",
+    "pixel_video": "VID_%Y%m%d_%H%M%S.",
 }
 # Maps from the EXIF Camera Name to the device name you want to use.
 CAMERA_MODEL_MAPPINGS = {
@@ -211,6 +227,10 @@ CITY_MAPPINGS = {
 }
 CITY_REPLACEMENTS = {
     " District": "",
+    " Province": "",
+    " County": "",
+    " Subdistrict": "",
+    "Departamento ": "",
 }
 COUNTRY_REPLACEMENTS = {
 }
@@ -426,10 +446,13 @@ try:
     def ignored(file_path):
         if file_path.split(".")[-1].lower() in EXTENSIONS_TO_IGNORE:
             return True
+        if file_path.split(".")[-1].lower() not in EXTENSIONS_TO_IMPORT:
+            return True
+
         for p in PARTIALS_TO_IGNORE:
             if p in file_path:
                 return True
-
+        
         return False
 
     def eta(start_time, size_copied, total_size):
@@ -565,8 +588,6 @@ try:
                         log_action("Failed to extract any EXIF or find device match from %s" % file_path)
                         log_action("Exif: %s" % exif_dict)
                         meta["error"] = "❗Failed to extract any EXIF."
-                        if "datetime" not in meta or not meta["datetime"]:
-                            meta["datetime"] = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
                         # raise e
             # print("extracted EXIF")
             # print(meta)
@@ -608,9 +629,7 @@ try:
                         print(matches)
                         print(matches[0])
                         raise e
-            else:
-                # Fallback to mtime
-                meta["datetime"] = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
+
 
         meta["mtime"] = datetime.datetime.fromtimestamp(os.path.getmtime(file_path))
 
