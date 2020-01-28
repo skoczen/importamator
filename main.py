@@ -67,7 +67,9 @@ PARTIALS_TO_IGNORE = [
     "Anki",  # Mylio
     "1Password",  # Mylio
     ".MYLock",  # Mylio
-    ".graffle",  # Mylio
+    ".graffle",
+    ".Sparkle",
+    ".app/",
 ]
 IMAGE_EXTENSIONS = [
     "jpg",
@@ -224,6 +226,9 @@ CITY_MAPPINGS = {
     "Kyoto-shi": "Kyoto",
     "Corona de Tucson": "Tucson",
     "Queenstown-Lakes": "Queenstown",
+    "Maha Phruettharam": "Bangkok",
+    "Maha Phruettharam District": "Bangkok",
+    "Maha Phruettharam Subdistrict": "Bangkok",
 }
 CITY_REPLACEMENTS = {
     " District": "",
