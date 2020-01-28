@@ -8,6 +8,7 @@ import io
 import os
 import piexif
 import pickle
+import json
 from PIL import Image, UnidentifiedImageError
 import imagehash
 import numpy
@@ -167,6 +168,15 @@ CAMERA_MODEL_MAPPINGS = {
     "The Baerbl": "htcevo4g",
     "The FudgeCan": "htcevo4g",
     "NIKON D7000": "nikond7000",
+    "K850i": "k850i",
+    "C765UZ": "c765uz",
+    "MG7500 series": "mg7500",
+    "iPhone 5S": "iphone5s",
+    "NIKON D200": "nikond200",
+    "Canon EOS 5D": "canoneos5d",
+    "DSC-H20": "dsch20",
+    "Canon EOS 6D": "canoneos6d",
+    "E-M5": "olympusem5",
 }
 EXTRA_CAMERA_MAPPINGS = {}
 # Maps device names to a prettier display format.
@@ -213,6 +223,15 @@ DEVICE_DISPLAYNAME_MAPPINGS = {
     "xolaroid2000": "Xolaroid 2000",
     "sonycybershot": "Sony Cybershot",
     "nikond7000": "Nikon D7000",
+    "k850i": "Sony Ericsson Cybershot K650i",
+    "c765uz": "Olympus C-765",
+    "mg7500": "Canon PIXMA MG7500",
+    "iphone5s": "iPhone 5S",
+    "nikond200": "Nikon D200",
+    "canoneos5d": "Canon EOS 5D",
+    "dsch20": "Sony Cybershot DSC-H20",
+    "canoneos6d": "Canon EOS 6D",
+    "olympusem5": "Olympus OM-D E-M5",
 
 }
 LOCATIONIQ_TOKEN = "e49f9326982f23"
@@ -236,6 +255,7 @@ CITY_REPLACEMENTS = {
     " County": "",
     " Subdistrict": "",
     "Departamento ": "",
+    "Arrondissement of ": "",
 }
 COUNTRY_REPLACEMENTS = {
 }
@@ -451,13 +471,14 @@ try:
     def ignored(file_path):
         if file_path.split(".")[-1].lower() in EXTENSIONS_TO_IGNORE:
             return True
-        if file_path.split(".")[-1].lower() not in EXTENSIONS_TO_IMPORT:
+
+        if not ARGS.all_files and file_path.split(".")[-1].lower() not in EXTENSIONS_TO_IMPORT:
             return True
 
         for p in PARTIALS_TO_IGNORE:
             if p in file_path:
                 return True
-        
+
         return False
 
     def eta(start_time, size_copied, total_size):
@@ -1108,7 +1129,11 @@ try:
                             action = "✔ Added"
                     else:
                         # print(meta)
-                        if meta["lowest_distance"] is not None:
+                        if (
+                            "lowest_distance" in meta and 
+                            meta["lowest_distance"] is not None and
+                            "original" in meta
+                        ):
                             if meta["lowest_distance"] == 0:
                                 action = "- Duplicate of %s: (Image match: Exact) " % (
                                     meta["original"],
@@ -1183,7 +1208,7 @@ try:
                     pass
                 counter += 1
         else:
-            print("❌ %s empty or not found on the %s" % (source_dir, DEVICE_NAME))
+            print("❌ %s empty or not found." % (source_dir,))
 
 
     def copy_files(imagehash_list, dry_run=False):
@@ -1356,6 +1381,10 @@ try:
             help="Clear location-date associations."
         )
         parser.add_argument(
+            '--all_files', action='store_true',
+            help="Attempt all files, not just images, movies, and music."
+        )
+        parser.add_argument(
             '--require-device', action='store_true',
             help="Do not allow devices to be set to 'unknown' if we can't figure it out.  Throw an error."
         )
@@ -1404,17 +1433,14 @@ try:
     if __name__ == '__main__':
         cli()
 except Exception as e:
+    print("Exception caught, saving brain so far.")
     with open('importamator.db', "w+b") as f:
-
         pickle.dump(brain, f)
-        print("Exception caught, saving brain so far.")
-        with open('importamator.db', "w+b") as f:
-            pickle.dump(brain, f)
 
 
         print("Creating Reports.")
         write_import_log()
         write_travel_history()
-        
+
 
     raise e
