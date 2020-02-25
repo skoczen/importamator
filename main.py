@@ -113,6 +113,9 @@ DATE_PARSERS = {
     "older_camera": "^[1-2][90]\d\d-\d\d\-\d\d \d\d\.\d\d\.\d\d",
     "older_video": "^[1-2][90]\d\d-\d\d\-\d\d \d\d\.\d\d",
     "pixel_video": "^VID_[1-2][90]\d\d\d\d\d\d_\d\d\d\d\d\d\.",
+    # Screen shot 2010-09-13 at 2.35.39 PM
+    "mac_screenshot_upper": "^Screen Shot [1-2][90]\d\d-\d\d-\d\d at \d+\.\d+\.\d+. [AP]M",
+    "mac_screenshot_lower": "^Screen shot [1-2][90]\d\d-\d\d-\d\d at \d+\.\d+\.\d+. [AP]M",
 }
 DATE_FORMAT_PATTERNS = {
     # 2018070223400200-F1C11A22FAEE3B82F21B330E1B786A39.mp4
@@ -121,6 +124,8 @@ DATE_FORMAT_PATTERNS = {
     "older_camera": "%Y-%m-%d %H.%M.%S",
     "older_video": "%Y-%m-%d %H.%M",
     "pixel_video": "VID_%Y%m%d_%H%M%S.",
+    "mac_screenshot_upper": "Screen Shot %Y-%m-%d at %I.%M.%S %p",
+    "mac_screenshot_lower": "Screen shot %Y-%m-%d at %I.%M.%S %p",
 }
 # Maps from the EXIF Camera Name to the device name you want to use.
 CAMERA_MODEL_MAPPINGS = {
@@ -172,11 +177,13 @@ CAMERA_MODEL_MAPPINGS = {
     "C765UZ": "c765uz",
     "MG7500 series": "mg7500",
     "iPhone 5S": "iphone5s",
-    "NIKON D200": "nikond200",
+    "NIKON D200": "bonnie_nikond200",
     "Canon EOS 5D": "canoneos5d",
     "DSC-H20": "dsch20",
     "Canon EOS 6D": "canoneos6d",
     "E-M5": "olympusem5",
+    "LiDE 100": "canonlide100",
+    "Galaxy Nexus": "galaxynexus",
 }
 EXTRA_CAMERA_MAPPINGS = {}
 # Maps device names to a prettier display format.
@@ -227,11 +234,13 @@ DEVICE_DISPLAYNAME_MAPPINGS = {
     "c765uz": "Olympus C-765",
     "mg7500": "Canon PIXMA MG7500",
     "iphone5s": "iPhone 5S",
-    "nikond200": "Nikon D200",
+    "bonnie_nikond200": "Nikon D200",
     "canoneos5d": "Canon EOS 5D",
     "dsch20": "Sony Cybershot DSC-H20",
     "canoneos6d": "Canon EOS 6D",
     "olympusem5": "Olympus OM-D E-M5",
+    "canonlide100": "Canon LiDE 100",
+    "galaxynexus": "Galaxy Nexus",
 
 }
 LOCATIONIQ_TOKEN = "e49f9326982f23"
@@ -248,11 +257,15 @@ CITY_MAPPINGS = {
     "Maha Phruettharam": "Bangkok",
     "Maha Phruettharam District": "Bangkok",
     "Maha Phruettharam Subdistrict": "Bangkok",
+    "Si Lom Subdistrict": "Bangkok",
+    "Cache County": "Logan",
+    "Cache": "Logan",
 }
 CITY_REPLACEMENTS = {
     " District": "",
     " Province": "",
     " County": "",
+    " Region": "",
     " Subdistrict": "",
     "Departamento ": "",
     "Arrondissement of ": "",
@@ -268,6 +281,318 @@ PEOPLE = [
     "edna",
     "steven"
 ]
+PRE_EXIF_GPS_LOCATIONS = {
+    "steven-1980-04-09": {
+        "country": "USA",
+        "city": "Denver",
+        "state": "Colorado",
+    },
+    "steven-1986-01-01": {
+        "country": "USA",
+        "city": "Gilbert",
+        "state": "Arizona",
+    },
+    "steven-1998-08-01": {
+        "country": "USA",
+        "city": "Tucson",
+        "state": "Arizona",
+    },
+    "steven-1999-06-01": {
+        "country": "USA",
+        "city": "San Diego",
+        "state": "California",
+    },
+    "steven-2000-01-01": {
+        "country": "USA",
+        "city": "Escondido",
+        "state": "California",
+    },
+    "steven-2003-01-01": {
+        "country": "USA",
+        "city": "San Diego",
+        "state": "California",
+    },
+    "steven-2004-12-31": {
+        "country": "USA",
+        "city": "Ithaca",
+        "state": "New York",
+    },
+    "steven-2005-12-02": {
+        "country": "USA",
+        "city": "Washington DC",
+        "state": "Washington DC",
+    },
+    "steven-2005-12-04": {
+        "country": "USA",
+        "city": "Ithaca",
+        "state": "New York",
+    },
+    "steven-2005-12-14": {
+        "country": "USA",
+        "city": "Baltimore",
+        "state": "Maryland",
+    },
+    "steven-2005-12-25": {
+        "country": "USA",
+        "city": "Gilbert",
+        "state": "Arizona",
+    },
+    "steven-2006-01-05": {
+        "country": "USA",
+        "city": "Ithaca",
+        "state": "New York",
+    },
+    "steven-2007-05-26": {
+        "country": "USA",
+        "city": "Rehoboth Beach",
+        "state": "Maryland",
+    },
+    "steven-2007-06-03": {
+        "country": "USA",
+        "city": "Ithaca",
+        "state": "New York",
+    },
+    "steven-2008-06-01": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2010-05-21": {
+        "country": "France",
+        "city": "Paris",
+        "state": "Ile-de-France",
+    },
+    "steven-2010-06-01": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2010-11-22": {
+        "country": "USA",
+        "city": "Palm Springs",
+        "state": "California",
+    },
+    "steven-2010-11-27": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2011-02-11": {
+        "country": "USA",
+        "city": "Seattle",
+        "state": "Washington",
+    },
+    "steven-2011-02-14": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2011-05-26": {
+        "country": "USA",
+        "city": "Fair Haven",
+        "state": "New Jersey",
+    },
+    "steven-2011-06-01": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2011-08-12": {
+        "country": "USA",
+        "city": "Long Peak",
+        "state": "Colorado",
+    },
+    "steven-2011-08-17": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2011-12-24": {
+        "country": "USA",
+        "city": "Phoenix",
+        "state": "Arizona",
+    },
+    "steven-2011-12-27": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2012-04-01": {
+        "country": "USA",
+        "city": "Imnaha",
+        "state": "Oregon",
+    },
+    "steven-2012-04-08": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2012-04-13": {
+        "country": "USA",
+        "city": "Las Vegas",
+        "state": "Nevada",
+    },
+    "steven-2012-04-16": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2012-06-04": {
+        "country": "USA",
+        "city": "Minneapolis",
+        "state": "Minnesota",
+    },
+    "steven-2012-06-10": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2012-06-27": {
+        "country": "USA",
+        "city": "San Francisco",
+        "state": "California",
+    },
+    "steven-2012-07-02": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2012-07-26": {
+        "country": "USA",
+        "city": "Phoenix",
+        "state": "Arizona",
+    },
+    "steven-2012-07-30": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2013-04-04": {
+        "country": "USA",
+        "city": "Orlando",
+        "state": "Florida",
+    },
+    "steven-2013-04-07": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2013-09-28": {
+        "country": "USA",
+        "city": "Seattle",
+        "state": "Washington",
+    },
+    "steven-2013-09-30": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2013-11-27": {
+        "country": "USA",
+        "city": "Logan",
+        "state": "Utah",
+    },
+    "steven-2013-12-01": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2013-12-23": {
+        "country": "USA",
+        "city": "Tucson",
+        "state": "Arizona",
+    },
+    "steven-2013-12-26": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2014-01-13": {
+        "country": "Spain",
+        "city": "Barcelona",
+        "state": "Catalonia",
+    },
+    "steven-2014-01-25": {
+        "country": "France",
+        "city": "Paris",
+        "state": "Ile-de-France",
+    },
+    "steven-2014-02-06": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2014-02-24": {
+        "country": "USA",
+        "city": "Las Vegas",
+        "state": "Nevada",
+    },
+    "steven-2014-02-26": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2014-04-13": {
+        "country": "USA",
+        "city": "Imnaha",
+        "state": "Oregon",
+    },
+    "steven-2014-04-20": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2014-05-03": {
+        "country": "USA",
+        "city": "Los Angeles",
+        "state": "California",
+    },
+    "steven-2014-05-06": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2014-08-30": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2014-09-26": {
+        "country": "USA",
+        "city": "Seattle",
+        "state": "Washington",
+    },
+    "steven-2014-09-29": {
+        "country": "USA",
+        "city": "Portland",
+        "state": "Oregon",
+    },
+    "steven-2014-11-03": {
+        "country": "USA",
+        "city": "Gilbert",
+        "state": "Arizona",
+    },
+    "steven-2014-11-06": {
+        "country": "USA",
+        "city": "Tucson",
+        "state": "Arizona",
+    },
+    "steven-2014-11-11": {
+        "country": "USA",
+        "city": "Seattle",
+        "state": "Washington",
+    },
+    "steven-2014-11-13": {
+        "country": "Thailand",
+        "city": "Phuket",
+        "state": "Phuket",
+    },
+    "steven-2015-01-01": {
+        "country": "Thailand",
+        "city": "Phuket Town",
+        "state": "Phuket",
+    },
+}
 UNKNOWN_PLACE_NAME = "Unknown"
 MAXIMUM_THUMBNAIL_HASH_DISTANCE = 8
 MAXIMUM_IDENTICAL_HASH_DISTANCE = 1
@@ -378,7 +703,7 @@ try:
             str(imagehash.phash(im.rotate(90), hash_size=16)),
             str(imagehash.phash(im.rotate(180), hash_size=16)),
             # TODO Technically, we only need three to ensure a match, but leaving this for now.
-            str(imagehash.phash(im.rotate(270), hash_size=16)),
+            # str(imagehash.phash(im.rotate(270), hash_size=16)),
         ]
         # print(hashes)
         return hashes
@@ -429,6 +754,10 @@ try:
                 pass
             else:
                 raise PermissionError
+
+    def write_temp_brain():
+        with open('importamator.db.bak', "w+b") as f:
+            pickle.dump(brain, f)
 
     def get_local_file_list(source_dir):
         files = []
@@ -814,32 +1143,70 @@ try:
             if exif_gps_only:
                 return meta
 
-            if meta["is_image"]:
-                os.system("open -a %s %s" % (
-                    preview_path,
-                    file_path.replace(" ", "\\ "))
-                )
-            else:
-                os.system("open %s" % file_path.replace(" ", "\\ "))
+            pre_exif_location = pre_exif_date(date_str)
+            if pre_exif_location:
+                brain["date_country"][date_str] = pre_exif_location["country"]
+                brain["date_city"][date_str] = pre_exif_location["city"]
+                brain["date_state"][date_str] = pre_exif_location["state"]
+                brain["month_country"][date_str] = pre_exif_location["country"]
+                meta["country"] = pre_exif_location["country"]
+                meta["city"] = pre_exif_location["city"]
+                meta["state"] = pre_exif_location["state"]
 
-            previous = None
-            for d in sorted(brain["date_country"].keys(), reverse=False):
-                # print("%s < %s  | %s" % (d, date_str, previous))
-                if d >= date_str:
-                    if not previous:
-                        previous = brain["date_country"][d]
-                    break
-                previous = brain["date_country"][d]
-            country = input("\n   %s, what country is this from, on %s? [%s] " % (
-                meta["person"].title(),
-                meta["datetime"].strftime("%B %d, %Y"),
-                previous,
-            )).strip()
-            if not country:
-                country = previous
-            meta["country"] = country
-            brain["date_country"][date_str] = meta["country"]
-            opened = True
+            else:
+
+                if meta["is_image"]:
+                    os.system("open -a %s %s" % (
+                        preview_path,
+                        file_path.replace(" ", "\\ ").replace("(", "\\(").replace(")", "\\)"),
+                    ))
+                else:
+                    os.system("open %s" % file_path.replace(" ", "\\ ").replace("(", "\\(").replace(")", "\\)"))
+
+                previous = None
+                for d in sorted(brain["date_country"].keys(), reverse=False):
+                    # print("%s < %s  | %s" % (d, date_str, previous))
+                    if d >= date_str:
+                        if not previous:
+                            previous = brain["date_country"][d]
+                        break
+                    previous = brain["date_country"][d]
+                subprocess.run(["afplay", "/System/Library/Sounds/Basso.aiff", ])
+
+                # Just for output
+                if date_str in brain["date_city"]:
+                    default_city = brain["date_city"][date_str]
+
+                else:
+                    default_city = None
+                    # print("%s < %s  | City %s" % (d, date_str, previous))
+                    for d in sorted(brain["date_city"].keys(), reverse=False):
+                        if d >= date_str:
+                            if not default_city:
+                                default_city = brain["date_city"][d]
+                            break
+                        default_city = brain["date_city"][d]
+
+                if default_city:
+                    input_str = "\n   %s, what country is this from, on %s? [%s, %s] " % (
+                        meta["person"].title(),
+                        meta["datetime"].strftime("%B %d, %Y"),
+                        default_city,
+                        previous,
+                    )
+                else:
+                    input_str = "\n   %s, what country is this from, on %s? [%s] " % (
+                        meta["person"].title(),
+                        meta["datetime"].strftime("%B %d, %Y"),
+                        previous,
+                    )
+
+                country = input(input_str).strip()
+                if not country:
+                    country = previous
+                meta["country"] = country
+                brain["date_country"][date_str] = meta["country"]
+                opened = True
 
         # City of Capture
         if "city" not in meta or not meta["city"]:
@@ -860,6 +1227,7 @@ try:
                             previous = brain["date_city"][d]
                         break
                     previous = brain["date_city"][d]
+                subprocess.run(["afplay", "/System/Library/Sounds/Basso.aiff", ])
                 city = input("   %s, what city is this from, on %s? [%s] " % (
                     meta["person"].title(),
                     meta["datetime"].strftime("%B %d, %Y"),
@@ -883,6 +1251,7 @@ try:
                         break
                     previous = brain["date_state"][d]
 
+                subprocess.run(["afplay", "/System/Library/Sounds/Basso.aiff", ])
                 state = input("   %s, what state is this from, on %s? [%s] " % (
                     meta["person"].title(),
                     meta["datetime"].strftime("%B %d, %Y"),
@@ -896,6 +1265,11 @@ try:
         for needle, replacement in COUNTRY_REPLACEMENTS.items():
             meta["country"] = meta["country"].replace(needle, replacement)
         meta["country"] = meta["country"].strip()
+
+        if "state" in meta:
+            for needle, replacement in CITY_REPLACEMENTS.items():
+                meta["state"] = meta["state"].replace(needle, replacement)
+            meta["state"] = meta["state"].strip()
 
         if meta["country"] in COUNTRY_MAPPINGS:
             meta["country"] = COUNTRY_MAPPINGS[meta["country"]]
@@ -1021,7 +1395,10 @@ try:
                             dup_file_path = lowest_hash_image["relative_file_path"]
                             # Clear all matching hashes
                             for hash_to_delete in brain["imagehashes"][lowest_hash]["imagehashes"]:
-                                del brain["imagehashes"][hash_to_delete]
+                                try:
+                                    del brain["imagehashes"][hash_to_delete]
+                                except:
+                                    log_action("Failed to delete imagehash %s. Ignoring and continuing, but that's weird." % hash_to_delete)
 
                             meta["result"] = "valid"
                             meta["original"] = meta["relative_file_path"]
@@ -1106,6 +1483,7 @@ try:
                     total_size += os.path.getsize(file_path)
 
             for file_path in file_list:
+                write_temp_brain()
                 meta = None
                 if not ignored(file_path) and os.path.getsize(file_path) > 0:
 
@@ -1115,9 +1493,9 @@ try:
                     sys.stdout.flush()
                     meta = get_file_metadata(file_path, exif_gps_only=exif_gps_only)
                     # print(meta)
-                    if exif_gps_only:
-                        if "failed" in meta:
-                            action = "❗Failed: %s" % meta["failed"]
+                    if "failed" in meta:
+                        action = "❗Failed: %s" % meta["failed"]
+                    elif exif_gps_only:
                         if "error" in meta:
                             action = "❗Checked"
                         else:
@@ -1236,8 +1614,14 @@ try:
                 ))
                 sys.stdout.flush()
 
-                date_str = meta["datetime"].strftime("%Y-%m-%d")
-                month_str = meta["datetime"].strftime("%Y-%m")
+                date_str = "%s%s" % (
+                    meta["person"],
+                    meta["datetime"].strftime("%Y-%m-%d"),
+                )
+                month_str = "%s%s" % (
+                    meta["person"],
+                    meta["datetime"].strftime("%Y-%m"),
+                )
                 updated_canonical_path = os.path.join(
                     "%s" % meta["datetime"].year,
                     "%02d - %s" % (meta["datetime"].month, ", ".join(brain["month_country"][month_str])),
